@@ -31,10 +31,36 @@ This project will follow a microservices-based architecture.
 #### API Gateway (Go)
 
 #### Players (Python + Django)
-- [ ] `POST /v1/players`
-- [ ] `GET /v1/players/{id}`
-- [ ] `PATCH /v1/players/{id}`
-- [ ] `DELETE /v1/players/{id}`
+
+<details>
+    <summary>Create Player</summary>
+```bash
+curl -X POST http://localhost:8000/v1/players \
+-d '{}'
+```
+</details>
+
+<details>
+    <summary>Get Player</summary>
+```bash
+curl http://localhost:8000/v1/players/<id>
+```
+</details>
+
+<details>
+    <summary>Update Player</summary>
+```bash
+curl -X PATCH http://localhost:8000/v1/players/<id> \
+-d '{}'
+```
+</details>
+
+<details>
+    <summary>Delete Player</summary>
+```bash
+curl -X DELETE http://localhost:8000/v1/players/<id>
+```
+</details>
 
 #### Teams (C# + .NET)
 - [ ] `POST /v1/teams`
@@ -60,3 +86,8 @@ This project will follow a microservices-based architecture.
 - [ ] `PATCH /v1/leagues/{id}`
 - [ ] `DELETE /v1/leagues/{id}`
 
+### Backlog
+- [ ] Implement gRPC Support for API Gateway
+- [ ] Test Downstream Proxy for API Gateway
+- [ ] Implement, Refactor, Test Players Service
+- [ ] JWT Auth, Rate Limiting, Logging, Monitoring, Data Validation, Tracing, Pagination, Caching
