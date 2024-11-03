@@ -1,7 +1,7 @@
 CREATE TABLE player (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
-    age INT NOT NULL
+    age INT NOT NULL,
     height VARCHAR(255) NOT NULL,
     weight INT NOT NULL,
     position VARCHAR(255) NOT NULL,
