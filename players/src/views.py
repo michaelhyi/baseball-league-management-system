@@ -7,6 +7,23 @@ from django.views.decorators.http import require_http_methods
 from players.src.models import PlayerNotFoundError, PlayerService, Position
 
 
+def parse_body(request) -> tuple[str, int, str, int, Position, int]:
+    body = json.loads(request.body)
+
+    name = body["name"]
+    age = body["age"]
+    height = body["height"]
+    weight = body["weight"]
+
+    if body["position"] not in Position.__members__:
+        raise ValueError("Invalid position")
+
+    position = Position[body["position"]]
+    team_id = body["teamId"]
+
+    return name, age, height, weight, position, team_id
+
+
 def handle_errors(func):
     def wrapper(*args, **kwargs):
         try:
@@ -26,14 +43,7 @@ def handle_errors(func):
 @require_http_methods(["POST"])
 @handle_errors
 def create_player(request):
-    body = json.loads(request.body)
-
-    name = body.get("name")
-    age = body.get("age")
-    height = body.get("height")
-    weight = body.get("weight")
-    position = Position[body.get("position")]
-    team_id = body.get("teamId")
+    name, age, height, weight, position, team_id = parse_body(request)
 
     PlayerService.create_player(name, age, height, weight, position, team_id)
     return JsonResponse({"message": "Player created"}, status=201)
@@ -52,20 +62,13 @@ def player_view(request, id):
 @handle_errors
 def get_player(request, id):
     player = PlayerService.get_player(id)
-    return JsonResponse(player.__dict__, status=200)
+    return JsonResponse({"player": player.__dict__}, status=200)
 
 
 @require_http_methods(["PATCH"])
 @handle_errors
 def update_player(request, id):
-    body = json.loads(request.body)
-
-    name = body.get("name")
-    age = body.get("age")
-    height = body.get("height")
-    weight = body.get("weight")
-    position = Position[body.get("position")]
-    team_id = body.get("teamId")
+    name, age, height, weight, position, team_id = parse_body(request)
 
     PlayerService.update_player(id, name, age, height, weight, position, team_id)
     return JsonResponse({"message": "Player updated"}, status=200)

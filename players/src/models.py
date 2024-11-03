@@ -119,10 +119,10 @@ height_pattern = r"^(?:(\d{1,2})'(\d{1,2})\"|\d{1,2}'\s*\d{1,2}\s*\"|(?:(\d{1,2}
 class PlayerServiceUtil:
     @staticmethod
     def validate_data(**kwargs):
-        for key, value in kwargs:
-            if type(value) is str and (value is None or len(value) == 0):
+        for key, value in kwargs.items():
+            if isinstance(value, str) and (value is None or len(value) == 0):
                 raise ValueError(f"{key} must not be empty")
-            if type(value) is int and value <= 0:
+            if isinstance(value, int) and value <= 0:
                 raise ValueError(f"{key} must be positive")
 
     @staticmethod
