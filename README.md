@@ -6,7 +6,8 @@
 
 ## About
 
-This app manages baseball leagues, teams, player profiles, game logs, and stats. It provides insights into player performance, league standings, and match results, making it suitable for both league management and statistical analysis.
+This app manages baseball leagues, teams, player profiles, game logs, and stats.
+It provides insights into player performance, league standings, and match results, making it suitable for both league management and statistical analysis.
 
 ### Tech Stack
 
@@ -21,7 +22,8 @@ This app manages baseball leagues, teams, player profiles, game logs, and stats.
 - .NET
 - MySQL
 
-This project will follow a microservices-based architecture. There will be 6 services total, 5 of which are listed below and the 6th being an API Gateway.
+This project will follow a microservices-based architecture.
+There will be 6 services total, 5 of which are listed below and the 6th being an API gateway.
 The API gateway will be made using Go and another one of the services will be made using Go + gRPC.
 Two of the services will be made using C#, .NET, and gRPC, and the remaining two will be made using Python, Django, and gRPC.
 
