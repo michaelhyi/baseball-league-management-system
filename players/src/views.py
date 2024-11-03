@@ -1,10 +1,9 @@
-# from django.shortcuts import render
+import json
 from django.db import DatabaseError
 from django.http import JsonResponse
-from django.http.response import json
 from django.views.decorators.http import require_http_methods
 
-from players.src.models import PlayerNotFoundError, PlayerService, Position
+from src.models import PlayerNotFoundError, PlayerService, Position
 
 
 def parse_body(request) -> tuple[str, int, str, int, Position, int]:
@@ -15,10 +14,12 @@ def parse_body(request) -> tuple[str, int, str, int, Position, int]:
     height = body["height"]
     weight = body["weight"]
 
-    if body["position"] not in Position.__members__:
-        raise ValueError("Invalid position")
+    position = Position(body["position"])
 
-    position = Position[body["position"]]
+    # TODO: fix
+    # if body["position"] not in Position.__members__:
+    # raise ValueError("Invalid position")
+
     team_id = body["teamId"]
 
     return name, age, height, weight, position, team_id
@@ -65,7 +66,6 @@ def get_player(request, id):
     return JsonResponse({"player": player.__dict__}, status=200)
 
 
-@require_http_methods(["PATCH"])
 @handle_errors
 def update_player(request, id):
     name, age, height, weight, position, team_id = parse_body(request)
@@ -74,7 +74,6 @@ def update_player(request, id):
     return JsonResponse({"message": "Player updated"}, status=200)
 
 
-@require_http_methods(["DELETE"])
 @handle_errors
 def delete_player(request, id):
     PlayerService.delete_player(id)

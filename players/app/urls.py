@@ -17,7 +17,7 @@ Including another URLconf
 # from django.contrib import admin
 from django.urls import path
 
-from players.src import views
+from src import views
 
 urlpatterns = [
         path('v1/players/', views.create_player),

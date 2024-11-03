@@ -95,7 +95,7 @@ curl -X DELETE http://localhost:8000/v1/players/<id>
 - [ ] `DELETE /v1/leagues/{id}`
 
 ### Backlog
-- [ ] Implement gRPC Support for API Gateway
+- [ ] Test Players Service
 - [ ] Test Downstream Proxy for API Gateway
-- [ ] Implement, Refactor, Test Players Service
+- [ ] Implement & Test gRPC Support for API Gateway
 - [ ] JWT Auth, Rate Limiting, Logging, Monitoring, Data Validation, Tracing, Pagination, Caching
