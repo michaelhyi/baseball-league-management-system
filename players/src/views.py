@@ -29,7 +29,16 @@ def create_player(request):
         return JsonResponse({"error": "Internal server error"}, status=500)
 
 
-@require_http_methods(["GET"])
+@require_http_methods(["GET", "PATCH", "DELETE"])
+def player_view(request, id):
+    if request.method == "GET":
+        return get_player(request, id)
+    elif request.method == "PATCH":
+        return update_player(request, id)
+    elif request.method == "DELETE":
+        return delete_player(request, id)
+
+
 def get_player(request, id):
     try:
         player = PlayerService.get_player(id)
