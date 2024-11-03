@@ -23,39 +23,38 @@ It provides insights into player performance, league standings, and match result
 - MySQL
 
 This project will follow a microservices-based architecture.
-There will be 6 services total, 5 of which are listed below and the 6th being an API gateway.
-The API gateway will be made using Go and another one of the services will be made using Go + gRPC.
-Two of the services will be made using C#, .NET, and gRPC, and the remaining two will be made using Python, Django, and gRPC.
 
 ## Development
 
 ### Requirements
 
-#### Players
+#### API Gateway (Go)
+
+#### Players (Python + Django)
 - [ ] `POST /v1/players`
 - [ ] `GET /v1/players/{id}`
 - [ ] `PATCH /v1/players/{id}`
 - [ ] `DELETE /v1/players/{id}`
 
-#### Teams
+#### Teams (C# + .NET)
 - [ ] `POST /v1/teams`
 - [ ] `GET /v1/teams/{id}`
 - [ ] `PATCH /v1/teams/{id}`
 - [ ] `DELETE /v1/teams/{id}`
 
-#### Games
+#### Games (Go + gRPC)
 - [ ] `POST /v1/games`
 - [ ] `GET /v1/games/{id}`
 - [ ] `PATCH /v1/games/{id}`
 - [ ] `DELETE /v1/games/{id}`
 
-#### Stats 
+#### Stats (Python + gRPC)
 - [ ] `POST /v1/stats`
 - [ ] `GET /v1/stats/{id}`
 - [ ] `PATCH /v1/stats/{id}`
 - [ ] `DELETE /v1/stats/{id}`
 
-#### Leagues
+#### Leagues (C# + gRPC)
 - [ ] `POST /v1/leagues`
 - [ ] `GET /v1/leagues/{id}`
 - [ ] `PATCH /v1/leagues/{id}`
