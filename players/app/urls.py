@@ -20,6 +20,6 @@ from django.urls import path
 from src import views
 
 urlpatterns = [
-        path('v1/players/', views.create_player),
-        path('v1/players/<int:id>/', views.player_view),
+        path('v1/players', views.create_player),
+        path('v1/players/<int:id>', views.player_view),
 ]

@@ -36,8 +36,17 @@ This project will follow a microservices-based architecture.
     <summary>Create Player</summary>
 
 ```bash
-curl -X POST http://localhost:8000/v1/players \
--d '{}'
+curl -i -X POST http://localhost:8080/v1/players \
+    -H 'Content-Type: application/json' \
+    -H 'Accept: application/json' \
+    -d '{
+            "name": "Michael Yi",
+            "age": 19,
+            "height": "5\u0027 10\"",
+            "weight": 140,
+            "position": "Shortstop",
+            "teamId": 1
+    }'
 ```
 
 </details>
@@ -46,7 +55,8 @@ curl -X POST http://localhost:8000/v1/players \
     <summary>Get Player</summary>
 
 ```bash
-curl http://localhost:8000/v1/players/<id>
+curl -i http://localhost:8080/v1/players/<id> \
+    -H 'Accept: application/json'
 ```
 
 </details>
@@ -55,8 +65,17 @@ curl http://localhost:8000/v1/players/<id>
     <summary>Update Player</summary>
 
 ```bash
-curl -X PATCH http://localhost:8000/v1/players/<id> \
--d '{}'
+curl -i -X PATCH http://localhost:8080/v1/players/<id> \
+    -H 'Content-Type: application/json' \
+    -H 'Accept: application/json' \
+    -d '{
+            "name": "Michael Yi",
+            "age": 19,
+            "height": "5\u0027 10\"",
+            "weight": 140,
+            "position": "Shortstop",
+            "teamId": 1
+    }'
 ```
 
 </details>
@@ -65,7 +84,8 @@ curl -X PATCH http://localhost:8000/v1/players/<id> \
     <summary>Delete Player</summary>
 
 ```bash
-curl -X DELETE http://localhost:8000/v1/players/<id>
+curl -i -X DELETE http://localhost:8080/v1/players/<id> \
+    -H 'Accept: application/json'
 ```
 
 </details>
@@ -95,7 +115,7 @@ curl -X DELETE http://localhost:8000/v1/players/<id>
 - [ ] `DELETE /v1/leagues/{id}`
 
 ### Backlog
-- [ ] Test Players Service
+- [ ] Test Players models.py
 - [ ] Test Downstream Proxy for API Gateway
 - [ ] Implement & Test gRPC Support for API Gateway
 - [ ] JWT Auth, Rate Limiting, Logging, Monitoring, Data Validation, Tracing, Pagination, Caching

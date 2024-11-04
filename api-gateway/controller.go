@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"io"
 	"net/http"
 )
@@ -54,7 +55,8 @@ var ROUTES_TO_METHODS = map[string]map[string]bool{
         "PATCH":  true,
         "DELETE": true,
     },
-"/v1/leagues": {
+
+    "/v1/leagues": {
         "POST": true,
     },
     "/v1/leagues/{id}": {
@@ -109,7 +111,17 @@ func handler(w http.ResponseWriter, r *http.Request) {
     }
 
     client := &http.Client{}
-    req, err := http.NewRequest(method, url+route, r.Body)
+    body, err := io.ReadAll(r.Body)
+
+    defer r.Body.Close()
+
+    if err != nil {
+        w.WriteHeader(http.StatusInternalServerError)
+        w.Write([]byte("500 - Internal Server Error"))
+        return
+    }
+
+    req, err := http.NewRequest(method, url+route, bytes.NewBuffer(body))
 
     if err != nil {
         w.WriteHeader(http.StatusInternalServerError)
@@ -130,7 +142,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
     }
     w.WriteHeader(resp.StatusCode)
 
-    body, err := io.ReadAll(resp.Body)
+    body, err = io.ReadAll(resp.Body)
 
     if err != nil {
         w.WriteHeader(http.StatusInternalServerError)
@@ -140,3 +152,4 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
     w.Write(body)
 }
+
