@@ -54,16 +54,15 @@ def create_player(request):
 def player_view(request, id):
     if request.method == "GET":
         return get_player(request, id)
-    elif request.method == "PATCH":
+    if request.method == "PATCH":
         return update_player(request, id)
-    elif request.method == "DELETE":
-        return delete_player(request, id)
+    return delete_player(request, id)
 
 
 @handle_errors
 def get_player(request, id):
     player = PlayerService.get_player(id)
-    return JsonResponse({"player": player.__dict__}, status=200)
+    return JsonResponse({"player": player.serialize()}, status=200)
 
 
 @handle_errors

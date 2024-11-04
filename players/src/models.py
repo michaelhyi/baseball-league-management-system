@@ -1,7 +1,7 @@
+import json
 from typing import Optional
 from django.db import DatabaseError, connection
 from enum import Enum
-from dataclasses import dataclass
 import re
 
 
@@ -18,15 +18,37 @@ class Position(Enum):
     DH = "Designated Hitter"
 
 
-@dataclass
 class Player:
-    id: Optional[int]
-    name: str
-    age: int
-    height: str
-    weight: int
-    position: Position
-    team_id: int
+    def __init__(
+        self,
+        id: Optional[int],
+        name: str,
+        age: int,
+        height: str,
+        weight: int,
+        position: Position,
+        team_id: int,
+    ):
+        self.id = id
+        self.name = name
+        self.age = age
+        self.height = height
+        self.weight = weight
+        self.position = position
+        self.team_id = team_id
+
+    def serialize(self):
+        return json.dumps(
+            {
+                "id": self.id,
+                "name": self.name,
+                "age": self.age,
+                "height": self.height,
+                "weight": self.weight,
+                "position": self.position.value,
+                "teamId": self.team_id,
+            }
+        )
 
 
 class PlayerDao:
