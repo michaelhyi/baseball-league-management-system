@@ -6,9 +6,9 @@ from enum import Enum
 class Position(Enum):
     P = "Pitcher"
     C = "Catcher"
-    FIRST_B = "First Base"
-    SECOND_B = "Second Base"
-    THIRD_B = "Third Base"
+    FIRST_BASE = "First Base"
+    SECOND_BASE = "Second Base"
+    THIRD_BASE = "Third Base"
     SS = "Shortstop"
     LF = "Left Field"
     CF = "Center Field"
