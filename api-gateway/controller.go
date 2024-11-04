@@ -7,88 +7,87 @@ import (
 )
 
 func Controller() *http.ServeMux {
-    mux := http.NewServeMux()
-    mux.HandleFunc("/", handler)
-    return mux
+	mux := http.NewServeMux()
+	mux.HandleFunc("/", handler)
+	return mux
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
-    path := r.URL.Path
-    method := r.Method
+	path := r.URL.Path
+	method := r.Method
 
-    route, err := ValidatePath(path)
+	route, err := ValidatePath(path)
 
-    if err != nil {
-        w.WriteHeader(http.StatusNotFound)
-        w.Write([]byte(err.Error()))
-        return
-    }
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte(err.Error()))
+		return
+	}
 
-    err = ValidateMethod(route, method)
+	err = ValidateMethod(route, method)
 
-    if err != nil {
-        w.WriteHeader(http.StatusMethodNotAllowed)
-        w.Write([]byte(err.Error()))
-        return
-    }
+	if err != nil {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		w.Write([]byte(err.Error()))
+		return
+	}
 
-    url := GetDownstreamUrl(route, path)
-    forwardRequest(w, r, url, method)
+	url := GetDownstreamUrl(route, path)
+	forwardRequest(w, r, url, method)
 }
 
 func forwardRequest(w http.ResponseWriter, r *http.Request, url string, method string) {
-    client := &http.Client{}
+	client := &http.Client{}
 
-    var body []byte
-    var err error
+	var body []byte
+	var err error
 
-    if method == http.MethodPost || method == http.MethodPatch {
-        body, err = io.ReadAll(r.Body)
-        defer r.Body.Close()
-    }
+	if method == http.MethodPost || method == http.MethodPatch {
+		body, err = io.ReadAll(r.Body)
+		defer r.Body.Close()
+	}
 
-    if err != nil {
-        w.WriteHeader(http.StatusInternalServerError)
-        w.Write([]byte("500 - Internal Server Error"))
-        return
-    }
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("500 - Internal Server Error"))
+		return
+	}
 
-    var req *http.Request
+	var req *http.Request
 
-    if method == http.MethodPost || method == http.MethodPatch {
-        req, err = http.NewRequest(method, url, bytes.NewBuffer(body))
-    } else {
-        req, err = http.NewRequest(method, url, nil)
-    }
+	if method == http.MethodPost || method == http.MethodPatch {
+		req, err = http.NewRequest(method, url, bytes.NewBuffer(body))
+	} else {
+		req, err = http.NewRequest(method, url, nil)
+	}
 
-    if err != nil {
-        w.WriteHeader(http.StatusInternalServerError)
-        w.Write([]byte("500 - Internal Server Error"))
-        return
-    }
-    
-    resp, err := client.Do(req)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("500 - Internal Server Error"))
+		return
+	}
 
-    if err != nil {
-        w.WriteHeader(http.StatusInternalServerError)
-        w.Write([]byte("500 - Internal Server Error"))
-        return
-    }
+	resp, err := client.Do(req)
 
-    for header, value := range resp.Header {
-        w.Header().Set(header, value[0])
-    }
-    w.WriteHeader(resp.StatusCode)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("500 - Internal Server Error"))
+		return
+	}
 
-    body, err = io.ReadAll(resp.Body)
-    defer resp.Body.Close()
+	for header, value := range resp.Header {
+		w.Header().Set(header, value[0])
+	}
+	w.WriteHeader(resp.StatusCode)
 
-    if err != nil {
-        w.WriteHeader(http.StatusInternalServerError)
-        w.Write([]byte("500 - Internal Server Error"))
-        return
-    }
+	body, err = io.ReadAll(resp.Body)
+	defer resp.Body.Close()
 
-    w.Write(body)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("500 - Internal Server Error"))
+		return
+	}
+
+	w.Write(body)
 }
-
