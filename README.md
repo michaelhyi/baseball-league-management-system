@@ -115,9 +115,13 @@ curl -i -X DELETE http://localhost:8080/v1/players/<id> \
 - [ ] `DELETE /v1/leagues/{id}`
 
 ### Backlog
+- [ ] Implement Teams Service
+- [ ] Implement Games Service
+- [ ] Use Django's ORM or Raw Feature?
+- [ ] Revert Design Patterns
+- [ ] Finish Unit Tests for Players Service
 - [ ] DOB Column for Players
 - [ ] Test API Gateway
-- [ ] Test Players models.py
 - [ ] Test Downstream Proxy for API Gateway
 - [ ] Implement & Test gRPC Support for API Gateway
 - [ ] JWT Auth, Rate Limiting, Logging, Monitoring, Data Validation, Tracing, Pagination, Caching
