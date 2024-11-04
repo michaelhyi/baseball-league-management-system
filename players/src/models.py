@@ -46,7 +46,7 @@ class Player:
                 "age": self.age,
                 "height": self.height,
                 "weight": self.weight,
-                "position": self.__str__(),
+                "position": self.position.__str__(),
                 "teamId": self.team_id,
             }
         )
