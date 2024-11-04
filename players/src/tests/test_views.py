@@ -1,8 +1,8 @@
 import json
-from typing import Optional
 from unittest.mock import patch
 from django.http import JsonResponse
 from django.test import TestCase
+from src.tests.helpers import TestRequest
 
 from src.models import Player, Position
 from src.views import (
@@ -12,13 +12,6 @@ from src.views import (
     player_view,
     update_player,
 )
-
-
-class TestRequest:
-    def __init__(self, path: str, body: Optional[str], method: str):
-        self.path = path
-        self.body = body
-        self.method = method
 
 
 class ViewsTest(TestCase):

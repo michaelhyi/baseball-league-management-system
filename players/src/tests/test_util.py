@@ -184,6 +184,7 @@ class PlayerServiceUtilTest(TestCase):
 
     def test_validate_height_will_throw_when_height_is_invalid(self):
         try:
+            PlayerServiceUtil.validate_height("5 10")
             PlayerServiceUtil.validate_height('5 10"')
             PlayerServiceUtil.validate_height("5' 10")
         except ValueError as e:
