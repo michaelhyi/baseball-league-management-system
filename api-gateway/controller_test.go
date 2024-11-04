@@ -19,7 +19,7 @@ func TestRouteNotFound(t *testing.T) {
     Controller().ServeHTTP(res, req)
 
     expectedStatusCode := http.StatusNotFound
-    expectedBody := "404 - Not Found"
+    expectedBody := "Route /notfound not found"
 
     if expectedStatusCode != res.Code {
         t.Errorf("Expected status code %d, got %d\n", expectedStatusCode, res.Code)
@@ -43,7 +43,7 @@ func TestMethodNotAllowed(t *testing.T) {
     Controller().ServeHTTP(res, req)
 
     expectedStatusCode := http.StatusMethodNotAllowed
-    expectedBody := "405 - Method Not Allowed"
+    expectedBody := "Method PUT not allowed for route /v1/players"
 
     if expectedStatusCode != res.Code {
         t.Errorf("Expected status code %d, got %d\n", expectedStatusCode, res.Code)
@@ -55,3 +55,4 @@ func TestMethodNotAllowed(t *testing.T) {
 }
 
 // TODO: Test downstream proxy
+

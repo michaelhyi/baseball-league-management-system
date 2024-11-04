@@ -17,6 +17,8 @@ class Position(Enum):
     RF = "Right Field"
     DH = "Designated Hitter"
 
+    def __str__(self):
+        return self.value
 
 class Player:
     def __init__(
@@ -45,7 +47,7 @@ class Player:
                 "age": self.age,
                 "height": self.height,
                 "weight": self.weight,
-                "position": self.position.value,
+                "position": self.__str__(),
                 "teamId": self.team_id,
             }
         )

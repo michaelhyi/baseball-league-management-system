@@ -6,114 +6,46 @@ import (
 	"net/http"
 )
 
-var ROUTES = map[string]bool {
-    "/v1/players": true,
-    "/v1/players/{id}": true,
-    "/v1/teams": true,
-    "/v1/teams/{id}": true,
-    "/v1/games": true,
-    "/v1/games/{id}": true,
-    "/v1/stats": true,
-    "/v1/stats/{id}": true,
-    "/v1/leagues": true,
-    "/v1/leagues/{id}": true,
-}
-
-var ROUTES_TO_METHODS = map[string]map[string]bool{
-    "/v1/players": {
-        "POST": true,
-    },
-    "/v1/players/{id}": {
-        "GET":    true,
-        "PATCH":  true,
-        "DELETE": true,
-    },
-
-    "/v1/teams": {
-        "POST": true,
-    },
-    "/v1/teams/{id}": {
-        "GET":    true,
-        "PATCH":  true,
-        "DELETE": true,
-    },
-
-    "/v1/games": {
-        "POST": true,
-    },
-    "/v1/games/{id}": {
-        "GET":    true,
-        "PATCH":  true,
-        "DELETE": true,
-    },
-
-    "/v1/stats": {
-        "POST": true,
-    },
-    "/v1/stats/{id}": {
-        "GET":    true,
-        "PATCH":  true,
-        "DELETE": true,
-    },
-
-    "/v1/leagues": {
-        "POST": true,
-    },
-    "/v1/leagues/{id}": {
-        "GET":    true,
-        "PATCH":  true,
-        "DELETE": true,
-    },
-}
-
-var ROUTES_TO_URLS = map[string]string{
-    "/v1/players": "http://localhost:8081",
-    "/v1/players/{id}": "http://localhost:8081",
-    "/v1/teams": "http://localhost:8082",
-    "/v1/teams/{id}": "http://localhost:8082",
-    "/v1/games": "http://localhost:8083",
-    "/v1/games/{id}": "http://localhost:8083",
-    "/v1/stats": "http://localhost:8084",
-    "/v1/stats/{id}": "http://localhost:8084",
-    "/v1/leagues": "http://localhost:8085",
-    "/v1/leagues/{id}": "http://localhost:8085",
-}
-
 func Controller() *http.ServeMux {
     mux := http.NewServeMux()
     mux.HandleFunc("/", handler)
-
     return mux
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
-    route := r.URL.Path
+    path := r.URL.Path
     method := r.Method
 
-    if _, ok := ROUTES[route]; !ok {
+    route, err := ValidatePath(path)
+
+    if err != nil {
         w.WriteHeader(http.StatusNotFound)
-        w.Write([]byte("404 - Not Found"))
+        w.Write([]byte(err.Error()))
         return
     }
 
-    if _, ok := ROUTES_TO_METHODS[route][method]; !ok {
+    err = ValidateMethod(route, method)
+
+    if err != nil {
         w.WriteHeader(http.StatusMethodNotAllowed)
-        w.Write([]byte("405 - Method Not Allowed"))
+        w.Write([]byte(err.Error()))
         return
     }
 
-    url, ok := ROUTES_TO_URLS[route]
+    url := GetDownstreamUrl(route, path)
+    forwardRequest(w, r, url, method)
+}
 
-    if !ok {
-        w.WriteHeader(http.StatusInternalServerError)
-        w.Write([]byte("500 - Internal Server Error"))
-        return
-    }
-
+func forwardRequest(w http.ResponseWriter, r *http.Request, url string, method string) {
     client := &http.Client{}
-    body, err := io.ReadAll(r.Body)
 
-    defer r.Body.Close()
+    var body []byte
+    var err error
+
+    if method == http.MethodPost || method == http.MethodPatch {
+        body, err = io.ReadAll(r.Body)
+        defer r.Body.Close()
+    }
 
     if err != nil {
         w.WriteHeader(http.StatusInternalServerError)
@@ -121,7 +53,13 @@ func handler(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    req, err := http.NewRequest(method, url+route, bytes.NewBuffer(body))
+    var req *http.Request
+
+    if method == http.MethodPost || method == http.MethodPatch {
+        req, err = http.NewRequest(method, url, bytes.NewBuffer(body))
+    } else {
+        req, err = http.NewRequest(method, url, nil)
+    }
 
     if err != nil {
         w.WriteHeader(http.StatusInternalServerError)
@@ -143,6 +81,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
     w.WriteHeader(resp.StatusCode)
 
     body, err = io.ReadAll(resp.Body)
+    defer resp.Body.Close()
 
     if err != nil {
         w.WriteHeader(http.StatusInternalServerError)
