@@ -155,7 +155,6 @@ curl -i -X DELETE http://localhost:8080/v1/teams/<id>
 ### Backlog
 - [ ] Implement Teams Service
     - [ ] Status Codes
-    - [ ] Ensure Responses are JSON 
     - [ ] Join Queries with Players
 - [ ] Implement Games Service
 - [ ] Use Django's ORM or Raw Feature?

@@ -27,11 +27,11 @@ public class TeamsController : ControllerBase
         }
         catch (ArgumentException ex)
         {
-            return BadRequest(ex.Message);
+            return BadRequest(new ErrorResponse(ex.Message));
         }
         catch (Exception ex)
         {
-            return StatusCode(500, ex.Message);
+            return StatusCode(500, new ErrorResponse(ex.Message));
         }
     }
 
@@ -45,15 +45,15 @@ public class TeamsController : ControllerBase
         }
         catch (ArgumentException ex)
         {
-            return BadRequest(ex.Message);
+            return BadRequest(new ErrorResponse(ex.Message));
         }
         catch (KeyNotFoundException ex)
         {
-            return NotFound(ex.Message);
+            return NotFound(new ErrorResponse(ex.Message));
         }
         catch (Exception ex)
         {
-            return StatusCode(500, ex.Message);
+            return StatusCode(500, new ErrorResponse(ex.Message));
         }
     }
 
@@ -67,11 +67,11 @@ public class TeamsController : ControllerBase
         }
         catch (ArgumentException ex)
         {
-            return BadRequest(ex.Message);
+            return BadRequest(new ErrorResponse(ex.Message));
         }
         catch (Exception ex)
         {
-            return StatusCode(500, ex.Message);
+            return StatusCode(500, new ErrorResponse(ex.Message));
         }
     }
 
@@ -85,15 +85,15 @@ public class TeamsController : ControllerBase
         }
         catch (ArgumentException ex)
         {
-            return BadRequest(ex.Message);
+            return BadRequest(new ErrorResponse(ex.Message));
         }
         catch (KeyNotFoundException ex)
         {
-            return NotFound(ex.Message);
+            return NotFound(new ErrorResponse(ex.Message));
         }
         catch (Exception ex)
         {
-            return StatusCode(500, ex.Message);
+            return StatusCode(500, new ErrorResponse(ex.Message));
         }
     }
 }
