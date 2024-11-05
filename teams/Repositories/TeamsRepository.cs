@@ -14,11 +14,11 @@ public class TeamsRepository : ITeamsRepository
         _ctx = ctx;
     }
 
-    public async Task CreateTeamAsync(string name, int leagueId)
+    public async Task<int> CreateTeamAsync(string name, int leagueId)
     {
-        await _ctx.Database.ExecuteSqlRawAsync
+        return await _ctx.Database.ExecuteSqlRawAsync
         (
-            "INSERT INTO teams (name, league_id) VALUES (@p0, @p1)",
+            "INSERT INTO teams (name, league_id) VALUES (@p0, @p1); SELECT LAST_INSERT_ID();",
             name,
             leagueId
         );

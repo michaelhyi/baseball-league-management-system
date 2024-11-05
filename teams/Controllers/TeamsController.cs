@@ -22,8 +22,8 @@ public class TeamsController : ControllerBase
     {
         try
         {
-            await _teamsService.CreateTeam(req);
-            return Created();
+            int id = await _teamsService.CreateTeam(req);
+            return StatusCode(201, new CreateTeamResponse(id));
         }
         catch (ArgumentException ex)
         {

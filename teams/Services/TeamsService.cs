@@ -15,7 +15,7 @@ public class TeamsService : ITeamsService
         _teamsRepository = teamsRepository;
     }
 
-    public async Task CreateTeam(TeamRequest req)
+    public async Task<int> CreateTeam(TeamRequest req)
     {
         _logger.LogInformation("Creating team");
         _logger.LogInformation("Request: {0}", JsonSerializer.Serialize(req));
@@ -30,7 +30,7 @@ public class TeamsService : ITeamsService
             throw new ArgumentException("leagueId must be positive");
         }
 
-        await _teamsRepository.CreateTeamAsync(req.Name, req.LeagueId);
+        return await _teamsRepository.CreateTeamAsync(req.Name, req.LeagueId);
     }
 
     public async Task<Team> GetTeam(int id)
@@ -62,7 +62,6 @@ public class TeamsService : ITeamsService
             throw new ArgumentException("id must be positive");
         }
 
-        // TODO: at least one field must be provided
         if (string.IsNullOrEmpty(req.Name) && string.IsNullOrWhiteSpace(req.Name) && req.LeagueId <= 0)
         {
             throw new ArgumentException("at least one valid field must be provided");

@@ -154,12 +154,12 @@ curl -i -X DELETE http://localhost:8080/v1/teams/<id>
 
 ### Backlog
 - [ ] Implement Teams Service
-    - [ ] Status Codes
     - [ ] Join Queries with Players
 - [ ] Implement Games Service
 - [ ] Use Django's ORM or Raw Feature?
 - [ ] Revert Design Patterns
 - [ ] Finish Unit Tests for Players Service
+- [ ] Return ID When Created Entity (also update)
 - [ ] DOB Column for Players
 - [ ] Test API Gateway
 - [ ] Test Downstream Proxy for API Gateway
