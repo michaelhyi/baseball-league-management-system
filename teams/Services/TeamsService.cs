@@ -63,6 +63,10 @@ public class TeamsService : ITeamsService
         }
 
         // TODO: at least one field must be provided
+        if (string.IsNullOrEmpty(req.Name) && string.IsNullOrWhiteSpace(req.Name) && req.LeagueId <= 0)
+        {
+            throw new ArgumentException("at least one valid field must be provided");
+        }
 
         Team? team = await _teamsRepository.GetTeamAsync(id);
 
@@ -71,9 +75,15 @@ public class TeamsService : ITeamsService
             throw new KeyNotFoundException("team not found");
         }
 
-        // TODO: based on the provided fields, update the team
-        team.Name = req.Name;
-        team.LeagueId = req.LeagueId;
+        if (!string.IsNullOrEmpty(req.Name) && !string.IsNullOrWhiteSpace(req.Name))
+        {
+            team.Name = req.Name;
+        }
+
+        if (req.LeagueId > 0)
+        {
+            team.LeagueId = req.LeagueId;
+        }
 
         await _teamsRepository.UpdateTeamAsync(team);
     }
