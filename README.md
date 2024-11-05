@@ -133,6 +133,7 @@ curl -i -X DELETE http://localhost:8080/v1/teams/<id>
 ```
 
 </details>
+
 #### Games (Go + gRPC)
 - [ ] `POST /v1/games`
 - [ ] `GET /v1/games/{id}`
