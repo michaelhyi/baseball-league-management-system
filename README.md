@@ -38,7 +38,6 @@ This project will follow a microservices-based architecture.
 ```bash
 curl -i -X POST http://localhost:8080/v1/players \
     -H 'Content-Type: application/json' \
-    -H 'Accept: application/json' \
     -d '{
             "name": "Michael Yi",
             "age": 19,
@@ -55,8 +54,7 @@ curl -i -X POST http://localhost:8080/v1/players \
     <summary>Get Player</summary>
 
 ```bash
-curl -i http://localhost:8080/v1/players/<id> \
-    -H 'Accept: application/json'
+curl -i http://localhost:8080/v1/players/<id>
 ```
 
 </details>
@@ -67,7 +65,6 @@ curl -i http://localhost:8080/v1/players/<id> \
 ```bash
 curl -i -X PATCH http://localhost:8080/v1/players/<id> \
     -H 'Content-Type: application/json' \
-    -H 'Accept: application/json' \
     -d '{
             "name": "Michael Yi",
             "age": 19,
@@ -84,18 +81,58 @@ curl -i -X PATCH http://localhost:8080/v1/players/<id> \
     <summary>Delete Player</summary>
 
 ```bash
-curl -i -X DELETE http://localhost:8080/v1/players/<id> \
-    -H 'Accept: application/json'
+curl -i -X DELETE http://localhost:8080/v1/players/<id>
 ```
 
 </details>
 
 #### Teams (C# + .NET)
-- [ ] `POST /v1/teams`
-- [ ] `GET /v1/teams/{id}`
-- [ ] `PATCH /v1/teams/{id}`
-- [ ] `DELETE /v1/teams/{id}`
 
+<details>
+    <summary>Create Team</summary>
+
+```bash
+curl -i -X POST http://localhost:8080/v1/teams \
+    -H 'Content-Type: application/json' \
+    -d '{
+        "name": "Los Angeles Dodgers",
+        "leagueId": 1
+    }'
+```
+
+</details>
+
+<details>
+    <summary>Get Team</summary>
+
+```bash
+curl -i http://localhost:8080/v1/teams/<id>
+```
+
+</details>
+
+<details>
+    <summary>Update Team</summary>
+
+```bash
+curl -i -X PATCH http://localhost:8080/v1/teams/<id> \
+    -H 'Content-Type: application/json' \
+    -d '{
+        "name": "New York Yankees",
+        "leagueId": 2
+    }'
+```
+
+</details>
+
+<details>
+    <summary>Delete Team</summary>
+
+```bash
+curl -i -X DELETE http://localhost:8080/v1/teams/<id>
+```
+
+</details>
 #### Games (Go + gRPC)
 - [ ] `POST /v1/games`
 - [ ] `GET /v1/games/{id}`
@@ -116,6 +153,9 @@ curl -i -X DELETE http://localhost:8080/v1/players/<id> \
 
 ### Backlog
 - [ ] Implement Teams Service
+    - [ ] Status Codes
+    - [ ] Ensure Responses are JSON 
+    - [ ] Join Queries with Players
 - [ ] Implement Games Service
 - [ ] Use Django's ORM or Raw Feature?
 - [ ] Revert Design Patterns
