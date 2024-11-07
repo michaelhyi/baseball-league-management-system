@@ -1,6 +1,7 @@
 import json
 from typing import Optional
 from enum import Enum
+from datetime import datetime
 
 
 class Position(Enum):
@@ -29,6 +30,8 @@ class Player:
         weight: int,
         position: Position,
         team_id: int,
+        created_at: datetime,
+        updated_at: datetime,
     ):
         self.id = id
         self.name = name
@@ -37,6 +40,8 @@ class Player:
         self.weight = weight
         self.position = position
         self.team_id = team_id
+        self.created_at = created_at
+        self.updated_at = updated_at
 
     def serialize(self):
         return json.dumps(
@@ -48,5 +53,8 @@ class Player:
                 "weight": self.weight,
                 "position": self.position.__str__(),
                 "teamId": self.team_id,
-            }
+                "createdAt": self.created_at,
+                "updatedAt": self.updated_at,
+            },
+            default=str,
         )

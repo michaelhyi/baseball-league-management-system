@@ -57,6 +57,30 @@ public class TeamsController : ControllerBase
         }
     }
 
+    [HttpGet("with-roster/{id}")]
+    public async Task<IActionResult> GetTeamWithRoster([FromRoute] int id)
+    {
+        _logger.LogInformation("GetTeamWithRoster called with id: {id}", id);
+
+        try
+        {
+            TeamWithRoster teamWithRoster = await _teamsService.GetTeamWithRoster(id);
+            return Ok(teamWithRoster);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new ErrorResponse(ex.Message));
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new ErrorResponse(ex.Message));
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new ErrorResponse(ex.Message));
+        }
+    }
+
     [HttpPatch("{id}")]
     public async Task<IActionResult> UpdateTeam([FromRoute] int id, [FromBody] TeamRequest req)
     {

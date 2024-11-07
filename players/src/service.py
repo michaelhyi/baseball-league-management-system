@@ -42,6 +42,19 @@ class PlayerService:
             raise e
 
     @staticmethod
+    def get_players_by_team_id(team_id: int):
+        try:
+            PlayerServiceUtil.validate_data(team_id=team_id)
+        except ValueError as e:
+            raise e
+
+        try:
+            players = PlayerDao.get_by_team_id(team_id)
+            return players
+        except DatabaseError as e:
+            raise e
+
+    @staticmethod
     def update_player(
         id: int,
         name: str,

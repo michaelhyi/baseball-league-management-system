@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import List, Optional
 from django.db import connection, DatabaseError
 from src.models import Player
 
@@ -29,11 +29,7 @@ class PlayerDao:
 
     @staticmethod
     def get(id: int) -> Optional[Player]:
-        sql = """
-        SELECT id, name, age, height, weight, position, team_id
-        FROM player
-        WHERE id = %s
-        """
+        sql = "SELECT * FROM player WHERE id = %s LIMIT 1"
 
         try:
             with connection.cursor() as cursor:
@@ -42,6 +38,18 @@ class PlayerDao:
                 if row:
                     return Player(*row)
                 return None
+        except DatabaseError as e:
+            raise e
+
+    @staticmethod
+    def get_by_team_id(team_id: int) -> List[Player]:
+        sql = "SELECT * FROM player WHERE team_id = %s"
+
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute(sql, [team_id])
+                rows = cursor.fetchall()
+                return [Player(*row) for row in rows]
         except DatabaseError as e:
             raise e
 

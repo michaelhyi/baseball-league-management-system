@@ -60,6 +60,16 @@ curl -i http://localhost:8080/v1/players/<id>
 </details>
 
 <details>
+    <summary>Get Players by Team ID</summary>
+
+```bash
+curl -i http://localhost:8080/v1/players?teamId=<id>
+```
+
+</details>
+
+
+<details>
     <summary>Update Player</summary>
 
 ```bash
@@ -112,6 +122,15 @@ curl -i http://localhost:8080/v1/teams/<id>
 </details>
 
 <details>
+    <summary>Get Team With Roster</summary>
+
+```bash
+curl -i http://localhost:8080/v1/teams/with-roster/<id>
+```
+
+</details>
+
+<details>
     <summary>Update Team</summary>
 
 ```bash
@@ -154,13 +173,18 @@ curl -i -X DELETE http://localhost:8080/v1/teams/<id>
 
 ### Backlog
 - [ ] Implement Teams Service
-    - [ ] Join Queries with Players
+    - [ ] Debug Last Inserted ID
+    - [ ] Fix 415 When API Proxy
+    - [ ] Debug some messed up JSON responses
 - [ ] Implement Games Service
+- [ ] Unit Test Teams Service
 - [ ] Use Django's ORM or Raw Feature?
-- [ ] Revert Design Patterns
+- [ ] Revert Django Design Patterns
 - [ ] Finish Unit Tests for Players Service
 - [ ] Return ID When Created Entity (also update)
 - [ ] DOB Column for Players
+- [ ] Player # Column for Players
+- [ ] Consistent Naming Conventions Across Tables
 - [ ] Test API Gateway
 - [ ] Test Downstream Proxy for API Gateway
 - [ ] Implement & Test gRPC Support for API Gateway

@@ -1,4 +1,3 @@
-from django.db import DatabaseError
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 
@@ -6,9 +5,23 @@ from src.util import handle_view_errors, parse_json_body
 from src.service import PlayerService
 
 
-@require_http_methods(["POST"])
+@require_http_methods(["GET", "POST"])
 @handle_view_errors
-def create_player(request):
+def create_player_or_get_players_by_team_id(request):
+    team_id = request.GET.get("teamId")
+
+    if team_id and request.method == "GET":
+        players = PlayerService.get_players_by_team_id(team_id)
+        return JsonResponse(
+            {"players": [player.serialize() for player in players]}, status=200
+        )
+
+    if team_id and not request.method == "GET":
+        return JsonResponse({"message": "method not allowed"}, status=405)
+
+    if not team_id and request.method == "GET":
+        return JsonResponse({"message": "teamId is required"}, status=400)
+
     name, age, height, weight, position, team_id = parse_json_body(request)
 
     PlayerService.create_player(name, age, height, weight, position, team_id)
