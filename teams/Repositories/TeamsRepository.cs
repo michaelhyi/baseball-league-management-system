@@ -1,27 +1,56 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using teams.Models;
 
 namespace Repositories;
 
 public class TeamsRepository : ITeamsRepository
 {
+    private readonly ILogger<TeamsRepository> _logger;
     private readonly ApplicationDbContext _ctx;
 
-    public TeamsRepository(ApplicationDbContext ctx)
+    public TeamsRepository(ILogger<TeamsRepository> logger, ApplicationDbContext ctx)
     {
+        _logger = logger;
         _ctx = ctx;
     }
 
     public async Task<int> CreateTeamAsync(string name, int leagueId)
     {
-        return await _ctx.Database.ExecuteSqlRawAsync
-        (
-            "INSERT INTO teams (name, league_id) VALUES (@p0, @p1); SELECT LAST_INSERT_ID();",
-            name,
-            leagueId
-        );
+        IDbContextTransaction transaction = await _ctx.Database.BeginTransactionAsync();
+
+        try
+        {
+            await _ctx.Database.ExecuteSqlRawAsync
+            (
+                    "INSERT INTO teams (name, league_id) VALUES (@p0, @p1)",
+                    name,
+                    leagueId
+            );
+
+            int id = await _ctx.Teams
+                    .FromSqlRaw("SELECT LAST_INSERT_ID() as id")
+                    .Select(t => t.Id).FirstOrDefaultAsync();
+
+            await transaction.CommitAsync();
+
+            _logger.LogInformation("Created team with id {id}", id);
+            return id;
+        }
+
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+
+        finally
+        {
+            await transaction.DisposeAsync();
+        }
     }
 
     public async Task<Team?> GetTeamAsync(int id)
