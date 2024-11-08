@@ -60,6 +60,12 @@ public class TeamsRepository : ITeamsRepository
             .FirstOrDefaultAsync();
     }
 
+    public async Task<IEnumerable<Player>> GetRosterAsync(int teamId) {
+        return await _ctx.Players
+            .FromSqlRaw("SELECT * FROM player WHERE team_id = @p0", teamId)
+            .ToListAsync();
+    }
+
     public async Task UpdateTeamAsync(Team team)
     {
         await _ctx.Database.ExecuteSqlRawAsync

@@ -30,8 +30,8 @@ class Player:
         weight: int,
         position: Position,
         team_id: int,
-        created_at: datetime,
-        updated_at: datetime,
+        created_at: Optional[datetime],
+        updated_at: Optional[datetime],
     ):
         self.id = id
         self.name = name

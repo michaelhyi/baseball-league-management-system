@@ -1,6 +1,6 @@
 using teams.Models;
 
-public class TeamWithRoster : Team
+public class TeamWithRoster
 {
     public Team Team { get; set; }
     public IEnumerable<Player> Roster { get; set; }

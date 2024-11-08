@@ -1,27 +1,21 @@
-using System.Text.Json.Serialization;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace teams.Models;
 
 public class Player
 {
-    [property: JsonPropertyName("id")]
     public int Id { get; set; }
-    [property: JsonPropertyName("name")]
     public string Name { get; set; }
-    [property: JsonPropertyName("age")]
     public int Age { get; set; }
-    [property: JsonPropertyName("height")]
     public string Height { get; set; }
-    [property: JsonPropertyName("weight")]
     public int Weight { get; set; }
-    [property: JsonPropertyName("position")]
     public string Position { get; set; }
-    [property: JsonPropertyName("teamId")]
+    [Column("team_id")]
     public int TeamId { get; set; }
-    [property: JsonPropertyName("createdAt")]
-    public string CreatedAt { get; set; }
-    [property: JsonPropertyName("updatedAt")]
-    public string UpdatedAt { get; set; }
+    [Column("created_at")]
+    public DateTime CreatedAt { get; set; }
+    [Column("updated_at")]
+    public DateTime UpdatedAt { get; set; }
 
     public Player
     (
@@ -32,8 +26,8 @@ public class Player
         int weight,
         string position,
         int teamId,
-        string createdAt,
-        string updatedAt
+        DateTime createdAt,
+        DateTime updatedAt
     )
     {
         Id = id;

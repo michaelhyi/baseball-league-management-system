@@ -17,7 +17,7 @@ class PlayerService:
         except ValueError as e:
             raise e
 
-        player = Player(None, name, age, height, weight, position, team_id)
+        player = Player(None, name, age, height, weight, position, team_id, None, None)
 
         try:
             PlayerDao.create(player)
@@ -38,19 +38,6 @@ class PlayerService:
                 raise PlayerNotFoundError("Player not found")
 
             return player
-        except DatabaseError as e:
-            raise e
-
-    @staticmethod
-    def get_players_by_team_id(team_id: int):
-        try:
-            PlayerServiceUtil.validate_data(team_id=team_id)
-        except ValueError as e:
-            raise e
-
-        try:
-            players = PlayerDao.get_by_team_id(team_id)
-            return players
         except DatabaseError as e:
             raise e
 
@@ -77,7 +64,7 @@ class PlayerService:
         if player is None:
             raise PlayerNotFoundError("Player not found")
 
-        player = Player(id, name, age, height, weight, position, team_id)
+        player = Player(id, name, age, height, weight, position, team_id, None, None)
 
         try:
             PlayerDao.update(player)

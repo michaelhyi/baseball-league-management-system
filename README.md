@@ -173,7 +173,6 @@ curl -i -X DELETE http://localhost:8080/v1/teams/<id>
 
 ### Backlog
 - [ ] Implement Teams Service
-    - [ ] Debug some messed up JSON responses
     - [ ] Fix 415 When API Proxy
 - [ ] Implement Games Service
 - [ ] Unit Test Teams Service

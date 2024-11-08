@@ -11,5 +11,6 @@ namespace Data
         }
 
         public DbSet<Team> Teams { get; set; }
+        public DbSet<Player> Players { get; set; }
     }
 }

@@ -8,18 +8,15 @@ public class TeamsService : ITeamsService
 {
     private readonly ILogger<TeamsService> _logger;
     private readonly ITeamsRepository _teamsRepository;
-    private readonly IPlayersService _playersService;
 
     public TeamsService
     (
         ILogger<TeamsService> logger,
-        ITeamsRepository teamsRepository,
-        IPlayersService playersService
+        ITeamsRepository teamsRepository
     )
     {
         _logger = logger;
         _teamsRepository = teamsRepository;
-        _playersService = playersService;
     }
 
     public async Task<int> CreateTeam(TeamRequest req)
@@ -75,7 +72,7 @@ public class TeamsService : ITeamsService
             throw new KeyNotFoundException("team not found");
         }
 
-        IEnumerable<Player> roster = await _playersService.GetPlayersByTeamId(id);
+        IEnumerable<Player> roster = await _teamsRepository.GetRosterAsync(id);
 
         return new TeamWithRoster(team, roster);
     }

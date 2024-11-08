@@ -42,18 +42,6 @@ class PlayerDao:
             raise e
 
     @staticmethod
-    def get_by_team_id(team_id: int) -> List[Player]:
-        sql = "SELECT * FROM player WHERE team_id = %s"
-
-        try:
-            with connection.cursor() as cursor:
-                cursor.execute(sql, [team_id])
-                rows = cursor.fetchall()
-                return [Player(*row) for row in rows]
-        except DatabaseError as e:
-            raise e
-
-    @staticmethod
     def update(player: Player):
         sql = """
         UPDATE player
