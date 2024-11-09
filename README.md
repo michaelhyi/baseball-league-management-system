@@ -11,15 +11,12 @@ It provides insights into player performance, league standings, and match result
 
 ### Tech Stack
 
-- Python
-- C#
+- Python/Django/Flask
+- C#/.NET
 - Go
-- gRPC
 - SQL
-- Swift
-- Kotlin
-- Django
-- .NET
+- gRPC
+- Swift/Kotlin
 - MySQL
 
 This project will follow a microservices-based architecture.
@@ -153,13 +150,13 @@ curl -i -X DELETE http://localhost:8080/v1/teams/<id>
 
 </details>
 
-#### Games (Go + gRPC)
+#### Games (Python + Flask)
 - [ ] `POST /v1/games`
 - [ ] `GET /v1/games/{id}`
 - [ ] `PATCH /v1/games/{id}`
 - [ ] `DELETE /v1/games/{id}`
 
-#### Stats (Python + gRPC)
+#### Stats (Go + gRPC)
 - [ ] `POST /v1/stats`
 - [ ] `GET /v1/stats/{id}`
 - [ ] `PATCH /v1/stats/{id}`
@@ -172,9 +169,8 @@ curl -i -X DELETE http://localhost:8080/v1/teams/<id>
 - [ ] `DELETE /v1/leagues/{id}`
 
 ### Backlog
-- [ ] Implement Teams Service
-    - [ ] Fix 415 When API Proxy
 - [ ] Implement Games Service
+- [ ] Fix 415 When API Proxy + Teams Service
 - [ ] Unit Test Teams Service
 - [ ] Use Django's ORM or Raw Feature?
 - [ ] Revert Django Design Patterns
