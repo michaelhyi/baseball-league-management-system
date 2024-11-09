@@ -155,7 +155,7 @@ curl -i -X DELETE http://localhost:8080/v1/teams/<id>
 - [ ] `PATCH /v1/games/{id}`
 - [ ] `DELETE /v1/games/{id}`
 
-#### Stats (Django/Flask)
+#### Stats (Python/Django)
 - [ ] `POST /v1/stats`
 - [ ] `GET /v1/stats/{id}`
 - [ ] `PATCH /v1/stats/{id}`
