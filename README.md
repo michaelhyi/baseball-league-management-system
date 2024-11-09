@@ -11,11 +11,10 @@ It provides insights into player performance, league standings, and match result
 
 ### Tech Stack
 
-- Python/Django/Flask
+- Python/Django
 - C#/.NET
-- Go
+- Go/HTTP/gRPC
 - SQL
-- gRPC
 - Swift/Kotlin
 - MySQL
 
@@ -25,9 +24,9 @@ This project will follow a microservices-based architecture.
 
 ### Requirements
 
-#### API Gateway (Go)
+#### API Gateway (Go/HTTP)
 
-#### Players (Python + Django)
+#### Players (Python/Django)
 
 <details>
     <summary>Create Player</summary>
@@ -93,7 +92,7 @@ curl -i -X DELETE http://localhost:8080/v1/players/<id>
 
 </details>
 
-#### Teams (C# + .NET)
+#### Teams (C#/.NET)
 
 <details>
     <summary>Create Team</summary>
@@ -150,19 +149,19 @@ curl -i -X DELETE http://localhost:8080/v1/teams/<id>
 
 </details>
 
-#### Games (Python + Flask)
+#### Games (Go + gRPC)
 - [ ] `POST /v1/games`
 - [ ] `GET /v1/games/{id}`
 - [ ] `PATCH /v1/games/{id}`
 - [ ] `DELETE /v1/games/{id}`
 
-#### Stats (Go + gRPC)
+#### Stats (Django/Flask)
 - [ ] `POST /v1/stats`
 - [ ] `GET /v1/stats/{id}`
 - [ ] `PATCH /v1/stats/{id}`
 - [ ] `DELETE /v1/stats/{id}`
 
-#### Leagues (C# + gRPC)
+#### Leagues (C#/.NET)
 - [ ] `POST /v1/leagues`
 - [ ] `GET /v1/leagues/{id}`
 - [ ] `PATCH /v1/leagues/{id}`
