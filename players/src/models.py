@@ -11,6 +11,7 @@ from django.db import connection, DatabaseError
 # TODO: enum usage (use Django Models?)
 # TODO: use Django ORM vs. SQL Injection?
 
+
 class PlayerNotFoundError(Exception):
     pass
 
