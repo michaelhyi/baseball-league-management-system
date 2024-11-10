@@ -1,8 +1,8 @@
 using teams.Models;
 
-namespace Repositories;
+namespace Daos;
 
-public interface ITeamsRepository
+public interface ITeamsDao
 {
     Task<int> CreateTeamAsync(string name, int leagueId);
     Task<Team?> GetTeamAsync(int id);

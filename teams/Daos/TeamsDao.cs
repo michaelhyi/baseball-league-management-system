@@ -1,18 +1,16 @@
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
 using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using teams.Models;
 
-namespace Repositories;
+namespace Daos;
 
-public class TeamsRepository : ITeamsRepository
+public class TeamsDao : ITeamsDao
 {
-    private readonly ILogger<TeamsRepository> _logger;
+    private readonly ILogger<TeamsDao> _logger;
     private readonly ApplicationDbContext _ctx;
 
-    public TeamsRepository(ILogger<TeamsRepository> logger, ApplicationDbContext ctx)
+    public TeamsDao(ILogger<TeamsDao> logger, ApplicationDbContext ctx)
     {
         _logger = logger;
         _ctx = ctx;

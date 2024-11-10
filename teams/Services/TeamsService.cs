@@ -1,5 +1,5 @@
 using System.Text.Json;
-using Repositories;
+using Daos;
 using teams.Models;
 
 namespace teams.Services;
@@ -7,16 +7,16 @@ namespace teams.Services;
 public class TeamsService : ITeamsService
 {
     private readonly ILogger<TeamsService> _logger;
-    private readonly ITeamsRepository _teamsRepository;
+    private readonly ITeamsDao _teamsDao;
 
     public TeamsService
     (
         ILogger<TeamsService> logger,
-        ITeamsRepository teamsRepository
+        ITeamsDao teamsDao
     )
     {
         _logger = logger;
-        _teamsRepository = teamsRepository;
+        _teamsDao = teamsDao;
     }
 
     public async Task<int> CreateTeam(TeamRequest req)
@@ -34,7 +34,7 @@ public class TeamsService : ITeamsService
             throw new ArgumentException("leagueId must be positive");
         }
 
-        return await _teamsRepository.CreateTeamAsync(req.Name, req.LeagueId);
+        return await _teamsDao.CreateTeamAsync(req.Name, req.LeagueId);
     }
 
     public async Task<Team> GetTeam(int id)
@@ -46,7 +46,7 @@ public class TeamsService : ITeamsService
             throw new ArgumentException("id must be positive");
         }
 
-        Team? team = await _teamsRepository.GetTeamAsync(id);
+        Team? team = await _teamsDao.GetTeamAsync(id);
 
         if (team == null)
         {
@@ -65,14 +65,14 @@ public class TeamsService : ITeamsService
             throw new ArgumentException("id must be positive");
         }
 
-        Team? team = await _teamsRepository.GetTeamAsync(id);
+        Team? team = await _teamsDao.GetTeamAsync(id);
 
         if (team == null)
         {
             throw new KeyNotFoundException("team not found");
         }
 
-        IEnumerable<Player> roster = await _teamsRepository.GetRosterAsync(id);
+        IEnumerable<Player> roster = await _teamsDao.GetRosterAsync(id);
 
         return new TeamWithRoster(team, roster);
     }
@@ -92,7 +92,7 @@ public class TeamsService : ITeamsService
             throw new ArgumentException("at least one valid field must be provided");
         }
 
-        Team? team = await _teamsRepository.GetTeamAsync(id);
+        Team? team = await _teamsDao.GetTeamAsync(id);
 
         if (team == null)
         {
@@ -109,7 +109,7 @@ public class TeamsService : ITeamsService
             team.LeagueId = req.LeagueId;
         }
 
-        await _teamsRepository.UpdateTeamAsync(team);
+        await _teamsDao.UpdateTeamAsync(team);
     }
 
     public async Task DeleteTeam(int id)
@@ -121,12 +121,12 @@ public class TeamsService : ITeamsService
             throw new ArgumentException("id must be positive");
         }
 
-        Team? team = await _teamsRepository.GetTeamAsync(id);
+        Team? team = await _teamsDao.GetTeamAsync(id);
         if (team == null)
         {
             throw new KeyNotFoundException("team not found");
         }
 
-        await _teamsRepository.DeleteTeamAsync(id);
+        await _teamsDao.DeleteTeamAsync(id);
     }
 }
