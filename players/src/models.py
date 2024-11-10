@@ -134,7 +134,7 @@ class Player:
         try:
             cursor.execute(
                 sql,
-                (
+                [
                     name,
                     jersey_number,
                     dob,
@@ -142,7 +142,7 @@ class Player:
                     weight,
                     position.value,
                     team_id,
-                ),
+                ],
             )
 
             cursor.execute("SELECT LAST_INSERT_ID() AS id")
@@ -159,45 +159,41 @@ class Player:
 
     @staticmethod
     def get(id: int, injected_cursor=None) -> "Player":
-        try:
-            validate_data(id=id)
-        except ValueError as e:
-            raise e
-
-        sql = "SELECT *, TIMESTAMPDIFF(YEAR, dob, CURDATE()) AS age FROM players WHERE id = %s LIMIT 1"
-
+        validate_data(id=id)
         cursor = injected_cursor or connection.cursor()
+
         try:
+            sql = "SELECT *, TIMESTAMPDIFF(YEAR, dob, CURDATE()) AS age FROM players WHERE id = %s LIMIT 1"
             cursor.execute(sql, [id])
             row = cursor.fetchone()
 
-            logging.info(f"Fetched row: {row}")
+            if not row:
+                raise PlayerNotFoundError("player not found")
+
+            logging.info(f"fetched row: {row}")
 
             columns = [col[0] for col in cursor.description]
             row_as_dict = dict(zip(columns, row))
 
             logging.info(f"row as dict: {row_as_dict}")
 
-            if row:
-                return Player(
-                    row_as_dict["id"],
-                    row_as_dict["name"],
-                    row_as_dict["jersey_number"],
-                    row_as_dict["dob"],
-                    row_as_dict["age"],
-                    row_as_dict["height"],
-                    row_as_dict["weight"],
-                    row_as_dict["position"],
-                    row_as_dict["team_id"],
-                    row_as_dict["created_at"],
-                    row_as_dict["updated_at"],
-                )
+            return Player(
+                row_as_dict["id"],
+                row_as_dict["name"],
+                row_as_dict["jersey_number"],
+                row_as_dict["dob"],
+                row_as_dict["age"],
+                row_as_dict["height"],
+                row_as_dict["weight"],
+                row_as_dict["position"],
+                row_as_dict["team_id"],
+                row_as_dict["created_at"],
+                row_as_dict["updated_at"],
+            )
         except DatabaseError as e:
             raise e
         finally:
             cursor.close()
-
-        raise PlayerNotFoundError("Player not found")
 
     @staticmethod
     def update(
@@ -211,19 +207,13 @@ class Player:
         team_id: int,
         injected_cursor=None,
     ):
-        try:
-            validate_data(
-                id=id, name=name, dob=dob, height=height, weight=weight, team_id=team_id
-            )
-            validate_jersey_number(jersey_number)
-            validate_height(height)
-        except ValueError as e:
-            raise e
+        validate_data(
+            id=id, name=name, dob=dob, height=height, weight=weight, team_id=team_id
+        )
+        validate_jersey_number(jersey_number)
+        validate_height(height)
 
-        try:
-            Player.get(id)
-        except PlayerNotFoundError as e:
-            raise e
+        Player.get(id, injected_cursor)
 
         sql = "UPDATE players SET name = %s, jersey_number = %s, dob = %s, height = %s, weight = %s, position = %s, team_id = %s WHERE id = %s"
 
@@ -231,7 +221,7 @@ class Player:
         try:
             cursor.execute(
                 sql,
-                (
+                [
                     name,
                     jersey_number,
                     dob,
@@ -240,7 +230,7 @@ class Player:
                     position.value,
                     team_id,
                     id,
-                ),
+                ],
             )
         except DatabaseError as e:
             raise e
@@ -249,20 +239,12 @@ class Player:
 
     @staticmethod
     def delete(id: int, injected_cursor=None):
-        try:
-            validate_data(id=id)
-        except ValueError as e:
-            raise e
-
-        try:
-            Player.get(id)
-        except PlayerNotFoundError as e:
-            raise e
-
-        sql = "DELETE FROM players WHERE id = %s"
+        validate_data(id=id)
+        Player.get(id, injected_cursor)
 
         cursor = injected_cursor or connection.cursor()
         try:
+            sql = "DELETE FROM players WHERE id = %s"
             cursor.execute(sql, [id])
         except DatabaseError as e:
             raise e

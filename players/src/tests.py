@@ -2,13 +2,14 @@ import datetime
 from django.test import SimpleTestCase
 from src.models import (
     Player,
+    PlayerNotFoundError,
     Position,
     validate_data,
     validate_date,
     validate_height,
     validate_jersey_number,
 )
-from unittest.mock import MagicMock, call
+from unittest.mock import MagicMock, call, patch
 
 
 class PositionEnumTest(SimpleTestCase):
@@ -185,6 +186,7 @@ class PlayerModelTests(SimpleTestCase):
         mock_cursor = MagicMock()
         mock_cursor.execute.return_value = None
         mock_cursor.fetchone.return_value = [1]
+        mock_cursor.close.return_value = None
 
         player_id = Player.create(
             "Michael Yi", "4", "2004-12-14", "5' 10\"", 140, Position.SS, 1, mock_cursor
@@ -194,7 +196,147 @@ class PlayerModelTests(SimpleTestCase):
             [
                 call(
                     "INSERT INTO players (name, jersey_number, dob, height, weight, position, team_id) VALUES (%s, %s, %s, %s, %s, %s, %s)",
-                    (
+                    ["Michael Yi", "4", "2004-12-14", "5' 10\"", 140, "Shortstop", 1],
+                ),
+                call("SELECT LAST_INSERT_ID() AS id"),
+            ]
+        )
+
+        self.assertEqual(player_id, 1)
+
+    def test_get(self):
+        mock_cursor = MagicMock()
+        mock_cursor.execute.return_value = None
+        mock_cursor.fetchone.return_value = (
+            1,
+            "Michael Yi",
+            "4",
+            "2004-12-14",
+            19,
+            "5' 10\"",
+            140,
+            "Shortstop",
+            1,
+            "2004-12-14",
+            "2004-12-14",
+        )
+        mock_cursor.description = [
+            ["id"],
+            ["name"],
+            ["jersey_number"],
+            ["dob"],
+            ["age"],
+            ["height"],
+            ["weight"],
+            ["position"],
+            ["team_id"],
+            ["created_at"],
+            ["updated_at"],
+        ]
+        mock_cursor.close.return_value = None
+
+        player = Player.get(1, mock_cursor)
+
+        mock_cursor.execute.assert_called_once_with(
+            "SELECT *, TIMESTAMPDIFF(YEAR, dob, CURDATE()) AS age FROM players WHERE id = %s LIMIT 1",
+            [1],
+        )
+
+        self.assertEqual(player.id, 1)
+        self.assertEqual(player.name, "Michael Yi")
+        self.assertEqual(player.jersey_number, "4")
+        self.assertEqual(player.dob, "2004-12-14")
+        self.assertEqual(player.age, 19)
+        self.assertEqual(player.height, "5' 10\"")
+        self.assertEqual(player.weight, 140)
+        self.assertEqual(player.position, "Shortstop")
+        self.assertEqual(player.team_id, 1)
+        self.assertEqual(player.created_at, "2004-12-14")
+        self.assertEqual(player.updated_at, "2004-12-14")
+
+    def test_get_will_throw_if_player_not_found(self):
+        mock_cursor = MagicMock()
+        mock_cursor.execute.return_value = None
+        mock_cursor.fetchone.return_value = None
+        mock_cursor.description = [
+            ["id"],
+            ["name"],
+            ["jersey_number"],
+            ["dob"],
+            ["age"],
+            ["height"],
+            ["weight"],
+            ["position"],
+            ["team_id"],
+            ["created_at"],
+            ["updated_at"],
+        ]
+        mock_cursor.close.return_value = None
+
+        try:
+            Player.get(1, mock_cursor)
+
+            mock_cursor.execute.assert_called_once_with(
+                "SELECT *, TIMESTAMPDIFF(YEAR, dob, CURDATE()) AS age FROM players WHERE id = %s LIMIT 1",
+                [1],
+            )
+
+            self.fail("should have thrown playernotfounderror")
+        except PlayerNotFoundError as e:
+            self.assertEqual(str(e), "player not found")
+
+    def test_update(self):
+        mock_cursor = MagicMock()
+        mock_cursor.fetchone.return_value = (
+            1,
+            "Michael Yi",
+            "4",
+            "2004-12-14",
+            19,
+            "5' 10\"",
+            140,
+            "Shortstop",
+            1,
+            "2004-12-14",
+            "2004-12-14",
+        )
+        mock_cursor.description = [
+            ["id"],
+            ["name"],
+            ["jersey_number"],
+            ["dob"],
+            ["age"],
+            ["height"],
+            ["weight"],
+            ["position"],
+            ["team_id"],
+            ["created_at"],
+            ["updated_at"],
+        ]
+        mock_cursor.execute.return_value = None
+        mock_cursor.close.return_value = None
+
+        Player.update(
+            1,
+            "Michael Yi",
+            "4",
+            "2004-12-14",
+            "5' 10\"",
+            140,
+            Position.SS,
+            1,
+            mock_cursor,
+        )
+
+        mock_cursor.execute.assert_has_calls(
+            [
+                call(
+                    "SELECT *, TIMESTAMPDIFF(YEAR, dob, CURDATE()) AS age FROM players WHERE id = %s LIMIT 1",
+                    [1],
+                ),
+                call(
+                    "UPDATE players SET name = %s, jersey_number = %s, dob = %s, height = %s, weight = %s, position = %s, team_id = %s WHERE id = %s",
+                    [
                         "Michael Yi",
                         "4",
                         "2004-12-14",
@@ -202,10 +344,51 @@ class PlayerModelTests(SimpleTestCase):
                         140,
                         "Shortstop",
                         1,
-                    ),
+                        1,
+                    ],
                 ),
-                call("SELECT LAST_INSERT_ID() AS id"),
             ]
         )
 
-        self.assertEqual(player_id, 1)
+    def test_delete(self):
+        mock_cursor = MagicMock()
+        mock_cursor.fetchone.return_value = (
+            1,
+            "Michael Yi",
+            "4",
+            "2004-12-14",
+            19,
+            "5' 10\"",
+            140,
+            "Shortstop",
+            1,
+            "2004-12-14",
+            "2004-12-14",
+        )
+        mock_cursor.description = [
+            ["id"],
+            ["name"],
+            ["jersey_number"],
+            ["dob"],
+            ["age"],
+            ["height"],
+            ["weight"],
+            ["position"],
+            ["team_id"],
+            ["created_at"],
+            ["updated_at"],
+        ]
+        mock_cursor.execute.return_value = None
+        mock_cursor.close.return_value = None
+
+        Player.delete(1, mock_cursor)
+
+        mock_cursor.execute.assert_has_calls(
+            [
+                call(
+                    "SELECT *, TIMESTAMPDIFF(YEAR, dob, CURDATE()) AS age FROM players WHERE id = %s LIMIT 1",
+                    [1],
+                ),
+                call("DELETE FROM players WHERE id = %s", [1]),
+            ]
+        )
