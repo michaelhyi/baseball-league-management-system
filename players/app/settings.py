@@ -81,9 +81,6 @@ DATABASES = {
         'PASSWORD': 'root',
         'HOST': 'localhost',
         'PORT': '3306',
-        'TEST': {
-            'NAME': 'test_baseball_league_management_system',
-        }
     },
 }
 
