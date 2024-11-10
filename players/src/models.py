@@ -1,6 +1,7 @@
 import re
 import logging
 from enum import Enum
+from datetime import datetime
 
 from django.db import connection, DatabaseError
 
@@ -8,8 +9,8 @@ logging.basicConfig(level=logging.INFO)
 
 # TODO: avoid explicit error handling, let it bubble through to views
 # TODO: simplify serialization (Django's model_to_dict)?
-# TODO: enum usage (use Django Models?)
-# TODO: use Django ORM vs. SQL Injection?
+# TODO: enum usage (use Django choices?)
+# TODO: use Django Models
 
 
 class PlayerNotFoundError(Exception):
@@ -62,18 +63,31 @@ def validate_height(height):
 
 
 class Player:
-    def __init__(self, **kwargs):
-        self.id = kwargs["id"]
-        self.name = kwargs["name"]
-        self.jersey_number = kwargs["jersey_number"]
-        self.dob = kwargs["dob"]
-        self.age = kwargs["age"]
-        self.height = kwargs["height"]
-        self.weight = kwargs["weight"]
-        self.position = kwargs["position"]
-        self.team_id = kwargs["team_id"]
-        self.created_at = kwargs["created_at"]
-        self.updated_at = kwargs["updated_at"]
+    def __init__(
+        self,
+        id: int,
+        name: str,
+        jersey_number: str,
+        dob: datetime,
+        age: int,
+        height: str,
+        weight: int,
+        position: Position,
+        team_id: int,
+        created_at: datetime,
+        updated_at: datetime,
+    ):
+        self.id = id
+        self.name = name
+        self.jersey_number = jersey_number
+        self.dob = dob
+        self.age = age
+        self.height = height
+        self.weight = weight
+        self.position = position
+        self.team_id = team_id
+        self.created_at = created_at
+        self.updated_at = updated_at
 
     def serialize(self):
         return {
@@ -164,9 +178,20 @@ class Player:
 
                 logging.info(f"row as dict: {row_as_dict}")
 
-                # TODO: feels unsafe. gotta have some form of validation instead of dropping the dictionary straight into the constructor
                 if row:
-                    return Player(**row_as_dict)
+                    return Player(
+                        row_as_dict["id"],
+                        row_as_dict["name"],
+                        row_as_dict["jersey_number"],
+                        row_as_dict["dob"],
+                        row_as_dict["age"],
+                        row_as_dict["height"],
+                        row_as_dict["weight"],
+                        row_as_dict["position"],
+                        row_as_dict["team_id"],
+                        row_as_dict["created_at"],
+                        row_as_dict["updated_at"],
+                    )
         except DatabaseError as e:
             raise e
 
