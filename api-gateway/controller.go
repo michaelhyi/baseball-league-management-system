@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"io"
+	"log"
 	"net/http"
 )
 
@@ -37,6 +38,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func forwardRequest(w http.ResponseWriter, r *http.Request, url string, method string) {
+	log.Printf("Forwarding request to url %s with method %s\n", url, method)
 	client := &http.Client{}
 
 	var body []byte
@@ -57,6 +59,7 @@ func forwardRequest(w http.ResponseWriter, r *http.Request, url string, method s
 
 	if method == http.MethodPost || method == http.MethodPatch {
 		req, err = http.NewRequest(method, url, bytes.NewBuffer(body))
+		req.Header.Add("Content-Type", "application/json")
 	} else {
 		req, err = http.NewRequest(method, url, nil)
 	}
@@ -67,6 +70,8 @@ func forwardRequest(w http.ResponseWriter, r *http.Request, url string, method s
 		return
 	}
 
+	log.Printf("Forwarding request: %v\n", req)
+
 	resp, err := client.Do(req)
 
 	if err != nil {
@@ -74,6 +79,8 @@ func forwardRequest(w http.ResponseWriter, r *http.Request, url string, method s
 		w.Write([]byte("500 - Internal Server Error"))
 		return
 	}
+
+	log.Println("Successfully forwarded request")
 
 	for header, value := range resp.Header {
 		w.Header().Set(header, value[0])

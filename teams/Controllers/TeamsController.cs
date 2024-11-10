@@ -20,6 +20,8 @@ public class TeamsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateTeam([FromBody] TeamRequest req)
     {
+        _logger.LogInformation("CreateTeam called with name: {name}", req.Name);
+
         try
         {
             int id = await _teamsService.CreateTeam(req);
