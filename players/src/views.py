@@ -1,16 +1,19 @@
 import json
+import logging
 from django.db import DatabaseError
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 
 from src.models import Player, PlayerNotFoundError, Position
 
+logging.basicConfig(level=logging.INFO)
 
-def parse_body(request) -> tuple[str, int, str, int, Position, int]:
+
+def parse_body(request) -> tuple[str, str, str, int, Position, int]:
     body = json.loads(request.body)
 
     name = body["name"]
-    age = body["age"]
+    dob = body["dob"]
     height = body["height"]
     weight = body["weight"]
 
@@ -22,7 +25,7 @@ def parse_body(request) -> tuple[str, int, str, int, Position, int]:
 
     team_id = body["teamId"]
 
-    return name, age, height, weight, position, team_id
+    return name, dob, height, weight, position, team_id
 
 
 def error_handler(func):
@@ -34,6 +37,7 @@ def error_handler(func):
         except PlayerNotFoundError as e:
             return JsonResponse({"error": str(e)}, status=404)
         except DatabaseError as e:
+            logging.error("err:", str(e))
             return JsonResponse({"error": "Internal server error"}, status=500)
 
     return wrapper
@@ -42,9 +46,12 @@ def error_handler(func):
 @require_http_methods(["POST"])
 @error_handler
 def create_player(request):
-    name, age, height, weight, position, team_id = parse_body(request)
+    logging.info("Create player request received")
+    name, dob, height, weight, position, team_id = parse_body(request)
 
-    Player.create(name, age, height, weight, position, team_id)
+    logging.info("Successfully parsed json body")
+
+    Player.create(name, dob, height, weight, position, team_id)
     return JsonResponse({"message": "Player created"}, status=201)
 
 

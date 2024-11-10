@@ -36,7 +36,7 @@ curl -i -X POST http://localhost:8080/v1/players \
     -H 'Content-Type: application/json' \
     -d '{
             "name": "Michael Yi",
-            "age": 19,
+            "dob": "2004-12-14",
             "height": "5\u0027 10\"",
             "weight": 140,
             "position": "Shortstop",
@@ -56,16 +56,6 @@ curl -i http://localhost:8080/v1/players/<id>
 </details>
 
 <details>
-    <summary>Get Players by Team ID</summary>
-
-```bash
-curl -i http://localhost:8080/v1/players?teamId=<id>
-```
-
-</details>
-
-
-<details>
     <summary>Update Player</summary>
 
 ```bash
@@ -73,7 +63,7 @@ curl -i -X PATCH http://localhost:8080/v1/players/<id> \
     -H 'Content-Type: application/json' \
     -d '{
             "name": "Michael Yi",
-            "age": 19,
+            "dob": "2004-12-14",
             "height": "5\u0027 10\"",
             "weight": 140,
             "position": "Shortstop",
@@ -168,11 +158,12 @@ curl -i -X DELETE http://localhost:8080/v1/teams/<id>
 - [ ] `DELETE /v1/leagues/{id}`
 
 ### Backlog
-- [ ] Resolve TODO's
 - [ ] Return ID When Created Entity (also update)
+- [ ] 400 Bad Request Tests Python
 - [ ] Player # Column for Players
-- [ ] DOB Column for Players
 - [ ] Use Django's ORM or Raw Feature?
+- [ ] Resolve TODO's
+
 - [ ] Implement Games Service
     - [ ] CRUD for Games
 - [ ] Implement Stats Service
