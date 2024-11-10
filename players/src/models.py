@@ -34,7 +34,9 @@ class Position(Enum):
 
 def validate_data(**kwargs):
     for key, value in kwargs.items():
-        if isinstance(value, str) and (value is None or len(value) == 0):
+        if value is None:
+            raise ValueError(f"{key} must not be null")
+        if isinstance(value, str) and len(value) == 0:
             raise ValueError(f"{key} must not be empty")
         if isinstance(value, int) and value <= 0:
             raise ValueError(f"{key} must be positive")
@@ -50,19 +52,13 @@ def validate_date(date):
 
 
 def validate_jersey_number(jersey_number):
-    if len(jersey_number) > 2:
-        raise ValueError("jersey number must be max 2 digits")
-
-    if jersey_number == "00":
-        pass
-
-    if int(jersey_number) < 0:
-        raise ValueError("jersey number must be between 0-99")
+    if not re.match("^\d{1,2}$", jersey_number):
+        raise ValueError("jersey number must contain 1-2 numeric digits")
 
 
 def validate_height(height):
     if not re.match(height_pattern, height):
-        raise ValueError("Height must match the following pattern: <ft>'<in>\"")
+        raise ValueError("height must match the following pattern: <ft>'<in>\"")
 
 
 class Player:
