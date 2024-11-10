@@ -1,14 +1,17 @@
+import datetime
 from django.test import SimpleTestCase
 from src.models import (
+    Player,
     Position,
     validate_data,
     validate_date,
     validate_height,
     validate_jersey_number,
 )
+from unittest.mock import MagicMock, call
 
 
-class PositionTest(SimpleTestCase):
+class PositionEnumTest(SimpleTestCase):
     def test_position_pitcher(self):
         position = Position.P
         self.assertEqual(position.__str__(), "Pitcher")
@@ -146,3 +149,63 @@ class ModelsUtilTest(SimpleTestCase):
             validate_height("5' 10\"")
         except:
             self.fail("should not have thrown anything")
+
+
+class PlayerModelTests(SimpleTestCase):
+    def test_player_serialization(self):
+        player = Player(
+            1,
+            "Michael Yi",
+            "4",
+            datetime.datetime(2004, 12, 14),
+            19,
+            "5' 10\"",
+            140,
+            Position.SS,
+            1,
+            datetime.datetime(2004, 12, 14),
+            datetime.datetime(2004, 12, 14),
+        )
+
+        dict = player.serialize()
+
+        self.assertEqual(dict["id"], 1)
+        self.assertEqual(dict["name"], "Michael Yi")
+        self.assertEqual(dict["jerseyNumber"], "#4")
+        self.assertEqual(dict["dob"], "2004-12-14 00:00:00")
+        self.assertEqual(dict["age"], 19)
+        self.assertEqual(dict["height"], "5' 10\"")
+        self.assertEqual(dict["weight"], 140)
+        self.assertEqual(dict["position"], "Shortstop")
+        self.assertEqual(dict["teamId"], 1)
+        self.assertEqual(dict["createdAt"], "2004-12-14 00:00:00")
+        self.assertEqual(dict["updatedAt"], "2004-12-14 00:00:00")
+
+    def test_create(self):
+        mock_cursor = MagicMock()
+        mock_cursor.execute.return_value = None
+        mock_cursor.fetchone.return_value = [1]
+
+        player_id = Player.create(
+            "Michael Yi", "4", "2004-12-14", "5' 10\"", 140, Position.SS, 1, mock_cursor
+        )
+
+        mock_cursor.execute.assert_has_calls(
+            [
+                call(
+                    "INSERT INTO players (name, jersey_number, dob, height, weight, position, team_id) VALUES (%s, %s, %s, %s, %s, %s, %s)",
+                    (
+                        "Michael Yi",
+                        "4",
+                        "2004-12-14",
+                        "5' 10\"",
+                        140,
+                        "Shortstop",
+                        1,
+                    ),
+                ),
+                call("SELECT LAST_INSERT_ID() AS id"),
+            ]
+        )
+
+        self.assertEqual(player_id, 1)
