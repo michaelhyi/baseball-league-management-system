@@ -6,6 +6,10 @@ from datetime import datetime
 
 from django.db import connection, DatabaseError
 
+# TODO: avoid explicit error handling, let it bubble through to views
+# TODO: simplify serialization (Django's model_to_dict)?
+# TODO: enum usage (use Django Models?)
+# TODO: use Django ORM vs. SQL Injection?
 
 class PlayerNotFoundError(Exception):
     pass

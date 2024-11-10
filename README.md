@@ -169,6 +169,7 @@ curl -i -X DELETE http://localhost:8080/v1/teams/<id>
 
 ### Backlog
 - [ ] Refactor Django Design Patterns
+- [ ] Resolve TODO's
 - [ ] Return ID When Created Entity (also update)
 - [ ] Consistent Naming Conventions Across Tables
 - [ ] Player # Column for Players

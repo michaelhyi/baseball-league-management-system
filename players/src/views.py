@@ -29,9 +29,7 @@ def error_handler(func):
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
-        except ValueError as e:
-            return JsonResponse({"error": str(e)}, status=400)
-        except KeyError as e:
+        except (ValueError, KeyError) as e:
             return JsonResponse({"error": str(e)}, status=400)
         except PlayerNotFoundError as e:
             return JsonResponse({"error": str(e)}, status=404)
@@ -50,6 +48,7 @@ def create_player(request):
     return JsonResponse({"message": "Player created"}, status=201)
 
 
+# TODO: rename function
 @require_http_methods(["GET", "PATCH", "DELETE"])
 def player_view(request, id):
     if request.method == "GET":
@@ -59,6 +58,7 @@ def player_view(request, id):
     return delete_player(request, id)
 
 
+# TODO: handle request not accesssed
 @error_handler
 def get_player(request, id):
     player = Player.get(id)
