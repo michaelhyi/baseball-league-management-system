@@ -102,7 +102,7 @@ class Player:
         player = Player(None, name, age, height, weight, position, team_id, None, None)
 
         sql = """
-        INSERT INTO player (name, age, height, weight, position, team_id)
+        INSERT INTO players (name, age, height, weight, position, team_id)
         VALUES (%s, %s, %s, %s, %s, %s)
         """
 
@@ -129,7 +129,7 @@ class Player:
         except ValueError as e:
             raise e
 
-        sql = "SELECT * FROM player WHERE id = %s LIMIT 1"
+        sql = "SELECT * FROM players WHERE id = %s LIMIT 1"
 
         try:
             with connection.cursor() as cursor:
@@ -166,7 +166,7 @@ class Player:
             raise e
 
         sql = """
-        UPDATE player
+        UPDATE players
         SET name = %s, age = %s, height = %s, weight = %s, position = %s, team_id = %s
         WHERE id = %s
         """
@@ -200,7 +200,7 @@ class Player:
         except PlayerNotFoundError as e:
             raise e
 
-        sql = "DELETE FROM player WHERE id = %s"
+        sql = "DELETE FROM players WHERE id = %s"
 
         try:
             with connection.cursor() as cursor:

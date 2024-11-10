@@ -60,7 +60,7 @@ public class TeamsDao : ITeamsDao
 
     public async Task<IEnumerable<Player>> GetRosterAsync(int teamId) {
         return await _ctx.Players
-            .FromSqlRaw("SELECT * FROM player WHERE team_id = @p0", teamId)
+            .FromSqlRaw("SELECT * FROM players WHERE team_id = @p0", teamId)
             .ToListAsync();
     }
 

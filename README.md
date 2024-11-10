@@ -170,7 +170,6 @@ curl -i -X DELETE http://localhost:8080/v1/teams/<id>
 ### Backlog
 - [ ] Resolve TODO's
 - [ ] Return ID When Created Entity (also update)
-- [ ] Consistent Naming Conventions Across Tables
 - [ ] Player # Column for Players
 - [ ] DOB Column for Players
 - [ ] Use Django's ORM or Raw Feature?
