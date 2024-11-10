@@ -1,1 +1,1 @@
-RENAME TABLE player to players;
+RENAME TABLE player TO players;
