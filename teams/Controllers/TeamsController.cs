@@ -89,7 +89,7 @@ public class TeamsController : ControllerBase
         try
         {
             await _teamsService.UpdateTeam(id, req);
-            return Ok();
+            return NoContent();
         }
         catch (ArgumentException ex)
         {

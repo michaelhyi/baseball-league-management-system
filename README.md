@@ -158,18 +158,17 @@ curl -i -X DELETE http://localhost:8080/v1/teams/<id>
 - [ ] `DELETE /v1/leagues/{id}`
 
 ### Backlog
-- [ ] Return ID When Created Entity (also update)
-- [ ] 400 Bad Request Tests Python
 - [ ] Player # Column for Players
+- [ ] Finish Unit Tests for Players Service
 - [ ] Use Django's ORM or Raw Feature?
 - [ ] Resolve TODO's
+- [ ] 400 Bad Request Tests Python
 
 - [ ] Implement Games Service
     - [ ] CRUD for Games
 - [ ] Implement Stats Service
 - [ ] Implement Leagues Service
 - [ ] Unit Test Teams Service
-- [ ] Finish Unit Tests for Players Service
 - [ ] Test API Gateway
 - [ ] Test Downstream Proxy for API Gateway
 - [ ] Implement & Test gRPC Support for API Gateway

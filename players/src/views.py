@@ -1,7 +1,7 @@
 import json
 import logging
 from django.db import DatabaseError
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_http_methods
 
 from src.models import Player, PlayerNotFoundError, Position
@@ -51,8 +51,8 @@ def create_player(request):
 
     logging.info("Successfully parsed json body")
 
-    Player.create(name, dob, height, weight, position, team_id)
-    return JsonResponse({"message": "Player created"}, status=201)
+    id = Player.create(name, dob, height, weight, position, team_id)
+    return JsonResponse({"id": id}, status=201)
 
 
 # TODO: rename function
@@ -77,10 +77,10 @@ def update_player(request, id):
     name, age, height, weight, position, team_id = parse_body(request)
 
     Player.update(id, name, age, height, weight, position, team_id)
-    return JsonResponse({"message": "Player updated"}, status=200)
+    return HttpResponse(status=204)
 
 
 @error_handler
 def delete_player(request, id):
     Player.delete(id)
-    return JsonResponse({"message": "Player deleted"}, status=200)
+    return HttpResponse(status=204)

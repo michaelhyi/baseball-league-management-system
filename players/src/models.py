@@ -84,7 +84,7 @@ class Player:
     @staticmethod
     def create(
         name: str, dob: str, height: str, weight: int, position: Position, team_id: int
-    ):
+    ) -> int:
         logging.info(
             f"Creating player with name {name}, dob {dob}, height {height}, weight {weight}, position {position}, and team_id {team_id}"
         )
@@ -115,6 +115,14 @@ class Player:
                         team_id,
                     ),
                 )
+
+                cursor.execute("SELECT LAST_INSERT_ID() AS id")
+
+                row = cursor.fetchone()
+                id = row[0]
+                logging.info(f"player inserted with id {row[0]}")
+
+                return id
         except DatabaseError as e:
             raise e
 
