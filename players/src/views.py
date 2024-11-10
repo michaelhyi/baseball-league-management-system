@@ -9,10 +9,11 @@ from src.models import Player, PlayerNotFoundError, Position
 logging.basicConfig(level=logging.INFO)
 
 
-def parse_body(request) -> tuple[str, str, str, int, Position, int]:
+def parse_body(request) -> tuple[str, str, str, str, int, Position, int]:
     body = json.loads(request.body)
 
     name = body["name"]
+    jersey_number = body["jerseyNumber"]
     dob = body["dob"]
     height = body["height"]
     weight = body["weight"]
@@ -25,7 +26,7 @@ def parse_body(request) -> tuple[str, str, str, int, Position, int]:
 
     team_id = body["teamId"]
 
-    return name, dob, height, weight, position, team_id
+    return name, jersey_number, dob, height, weight, position, team_id
 
 
 def error_handler(func):
@@ -47,11 +48,11 @@ def error_handler(func):
 @error_handler
 def create_player(request):
     logging.info("Create player request received")
-    name, dob, height, weight, position, team_id = parse_body(request)
+    name, jersey_number, dob, height, weight, position, team_id = parse_body(request)
 
     logging.info("Successfully parsed json body")
 
-    id = Player.create(name, dob, height, weight, position, team_id)
+    id = Player.create(name, jersey_number, dob, height, weight, position, team_id)
     return JsonResponse({"id": id}, status=201)
 
 
@@ -74,9 +75,9 @@ def get_player(request, id):
 
 @error_handler
 def update_player(request, id):
-    name, age, height, weight, position, team_id = parse_body(request)
+    name, jersey_number, age, height, weight, position, team_id = parse_body(request)
 
-    Player.update(id, name, age, height, weight, position, team_id)
+    Player.update(id, name, jersey_number, age, height, weight, position, team_id)
     return HttpResponse(status=204)
 
 

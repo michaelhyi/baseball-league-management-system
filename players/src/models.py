@@ -49,6 +49,17 @@ def validate_date(date):
         raise ValueError("date must match the following pattern: YYYY-MM-DDTHH")
 
 
+def validate_jersey_number(jersey_number):
+    if len(jersey_number) > 2:
+        raise ValueError("jersey number must be max 2 digits")
+
+    if jersey_number == "00":
+        pass
+
+    if int(jersey_number) < 0:
+        raise ValueError("jersey number must be between 0-99")
+
+
 def validate_height(height):
     if not re.match(height_pattern, height):
         raise ValueError("Height must match the following pattern: <ft>'<in>\"")
@@ -58,6 +69,7 @@ class Player:
     def __init__(self, **kwargs):
         self.id = kwargs["id"]
         self.name = kwargs["name"]
+        self.jersey_number = kwargs["jersey_number"]
         self.dob = kwargs["dob"]
         self.age = kwargs["age"]
         self.height = kwargs["height"]
@@ -71,6 +83,7 @@ class Player:
         return {
             "id": self.id,
             "name": self.name,
+            "jerseyNumber": "#" + self.jersey_number,
             "dob": str(self.dob),
             "age": self.age,
             "height": self.height,
@@ -83,23 +96,30 @@ class Player:
 
     @staticmethod
     def create(
-        name: str, dob: str, height: str, weight: int, position: Position, team_id: int
+        name: str,
+        jersey_number: str,
+        dob: str,
+        height: str,
+        weight: int,
+        position: Position,
+        team_id: int,
     ) -> int:
         logging.info(
-            f"Creating player with name {name}, dob {dob}, height {height}, weight {weight}, position {position}, and team_id {team_id}"
+            f"Creating player with name {name}, jersey_number {jersey_number}, dob {dob}, height {height}, weight {weight}, position {position}, and team_id {team_id}"
         )
 
         try:
             validate_data(
                 name=name, dob=dob, height=height, weight=weight, team_id=team_id
             )
+            validate_jersey_number(jersey_number)
             validate_height(height)
         except ValueError as e:
             raise e
 
         sql = """
-        INSERT INTO players (name, dob, height, weight, position, team_id)
-        VALUES (%s, %s, %s, %s, %s, %s)
+        INSERT INTO players (name, jersey_number, dob, height, weight, position, team_id)
+        VALUES (%s, %s, %s, %s, %s, %s, %s)
         """
 
         try:
@@ -108,6 +128,7 @@ class Player:
                     sql,
                     (
                         name,
+                        jersey_number,
                         dob,
                         height,
                         weight,
@@ -159,6 +180,7 @@ class Player:
     def update(
         id: int,
         name: str,
+        jersey_number: str,
         dob: str,
         height: str,
         weight: int,
@@ -169,6 +191,7 @@ class Player:
             validate_data(
                 id=id, name=name, dob=dob, height=height, weight=weight, team_id=team_id
             )
+            validate_jersey_number(jersey_number)
             validate_height(height)
         except ValueError as e:
             raise e
@@ -180,7 +203,7 @@ class Player:
 
         sql = """
         UPDATE players
-        SET name = %s, dob = %s, height = %s, weight = %s, position = %s, team_id = %s
+        SET name = %s, jersey_number = %s, dob = %s, height = %s, weight = %s, position = %s, team_id = %s
         WHERE id = %s
         """
 
@@ -190,6 +213,7 @@ class Player:
                     sql,
                     (
                         name,
+                        jersey_number,
                         dob,
                         height,
                         weight,

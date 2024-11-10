@@ -36,6 +36,7 @@ curl -i -X POST http://localhost:8080/v1/players \
     -H 'Content-Type: application/json' \
     -d '{
             "name": "Michael Yi",
+            "jerseyNumber": "14",
             "dob": "2004-12-14",
             "height": "5\u0027 10\"",
             "weight": 140,
@@ -63,6 +64,7 @@ curl -i -X PATCH http://localhost:8080/v1/players/<id> \
     -H 'Content-Type: application/json' \
     -d '{
             "name": "Michael Yi",
+            "jerseyNumber": "14",
             "dob": "2004-12-14",
             "height": "5\u0027 10\"",
             "weight": 140,
@@ -158,7 +160,6 @@ curl -i -X DELETE http://localhost:8080/v1/teams/<id>
 - [ ] `DELETE /v1/leagues/{id}`
 
 ### Backlog
-- [ ] Player # Column for Players
 - [ ] Finish Unit Tests for Players Service
 - [ ] Use Django's ORM or Raw Feature?
 - [ ] Resolve TODO's

@@ -1,0 +1,1 @@
+ALTER TABLE players ADD COLUMN jersey_number VARCHAR(2) NOT NULL;
