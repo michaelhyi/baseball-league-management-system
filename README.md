@@ -30,55 +30,59 @@ This project follows a microservices-based architecture.
 </details>
 
 <details>
-<summary>Players (Python/Django)</summary>
-- <details>
-      <summary>Create Player</summary>
+    <summary>Players (Python/Django)</summary>
 
-  ```bash
-  curl -i -X POST http://localhost:8080/v1/players \
-      -H 'Content-Type: application/json' \
-      -d '{
-          "name": "Michael Yi",
-          "jerseyNumber": "14",
-          "dob": "2004-12-14",
-          "height": "5\u0027 10\"",
-          "weight": 140,
-          "position": "Shortstop",
-          "teamId": 1
-  }'
-  ```
-  </details>
-- <details>
-  <summary>Get Player</summary>
+<details>
+    <summary>Create Player</summary>
 
-  ```bash
-  curl -i http://localhost:8080/v1/players/<id>
-  ```
-  </details>
-- <details>
-  <summary>Update Player</summary>
-
-   ```bash
-   curl -i -X PATCH http://localhost:8080/v1/players/<id> \
-       -H 'Content-Type: application/json' \
-       -d '{
-           "name": "Michael Yi",
-           "jerseyNumber": "14",
-           "dob": "2004-12-14",
-           "height": "5\u0027 10\"",
-           "weight": 140,
-           "position": "Shortstop",
-           "teamId": 1
-    }'
-    ```
+```bash
+curl -i -X POST http://localhost:8080/v1/players \
+    -H 'Content-Type: application/json' \
+    -d '{
+        "name": "Michael Yi",
+        "jerseyNumber": "14",
+        "dob": "2004-12-14",
+        "height": "5\u0027 10\"",
+        "weight": 140,
+        "position": "Shortstop",
+        "teamId": 1
+}'
+```
 </details>
-- <details>
-  <summary>Delete Player</summary>
 
-  ```bash
-  curl -i -X DELETE http://localhost:8080/v1/players/<id>
-  ```
-  </details>
+<details>
+    <summary>Get Player</summary>
+
+```bash
+curl -i http://localhost:8080/v1/players/<id>
+```
+</details>
+
+<details>
+    <summary>Update Player</summary>
+
+```bash
+curl -i -X PATCH http://localhost:8080/v1/players/<id> \
+    -H 'Content-Type: application/json' \
+    -d '{
+        "name": "Michael Yi",
+        "jerseyNumber": "14",
+        "dob": "2004-12-14",
+        "height": "5\u0027 10\"",
+        "weight": 140,
+        "position": "Shortstop",
+        "teamId": 1
+}'
+```
+</details>
+
+<details>
+    <summary>Delete Player</summary>
+
+```bash
+curl -i -X DELETE http://localhost:8080/v1/players/<id>
+```
+</details>
 
 <br/>
 </details>
@@ -86,7 +90,7 @@ This project follows a microservices-based architecture.
 <details>
     <summary>Teams (C#/.NET)</summary>
 
-- <details>
+<details>
     <summary>Create Team</summary>
 
 ```bash
@@ -97,28 +101,25 @@ curl -i -X POST http://localhost:8080/v1/teams \
         "leagueId": 1
     }'
 ```
-
 </details>
 
-- <details>
+<details>
     <summary>Get Team</summary>
 
 ```bash
 curl -i http://localhost:8080/v1/teams/<id>
 ```
-
 </details>
 
-- <details>
+<details>
     <summary>Get Team With Roster</summary>
 
 ```bash
 curl -i http://localhost:8080/v1/teams/with-roster/<id>
 ```
-
 </details>
 
-- <details>
+<details>
     <summary>Update Team</summary>
 
 ```bash
@@ -131,7 +132,7 @@ curl -i -X PATCH http://localhost:8080/v1/teams/<id> \
 ```
 </details>
 
-- <details>
+<details>
     <summary>Delete Team</summary>
 
 ```bash
