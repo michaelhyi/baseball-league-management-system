@@ -26,7 +26,8 @@ This project will follow a microservices-based architecture.
 
 #### API Gateway (Go/HTTP)
 
-#### Players (Python/Django)
+<details>
+    <summary>Players (Python/Django)</summary>
 
 <details>
     <summary>Create Player</summary>
@@ -83,8 +84,10 @@ curl -i -X DELETE http://localhost:8080/v1/players/<id>
 ```
 
 </details>
+</details>
 
-#### Teams (C#/.NET)
+<details>
+    <summary>Teams (C#/.NET)</summary>
 
 <details>
     <summary>Create Team</summary>
@@ -129,7 +132,6 @@ curl -i -X PATCH http://localhost:8080/v1/teams/<id> \
         "leagueId": 2
     }'
 ```
-
 </details>
 
 <details>
@@ -138,8 +140,9 @@ curl -i -X PATCH http://localhost:8080/v1/teams/<id> \
 ```bash
 curl -i -X DELETE http://localhost:8080/v1/teams/<id>
 ```
-
 </details>
+</details>
+
 
 #### Games (Go + gRPC)
 - [ ] `POST /v1/games`
@@ -161,17 +164,14 @@ curl -i -X DELETE http://localhost:8080/v1/teams/<id>
 
 ### Backlog
 - [ ] API Gateway
-    - [ ] Test API Gateway
-    - [ ] Test Downstream Proxy for API Gateway
-    - [ ] Implement & Test gRPC Support for API Gateway
+    - [ ] Unit Tests
     - [ ] JWT Auth, Rate Limiting, Logging, Monitoring, Data Validation, Tracing, Pagination, Caching
 - [ ] Players Service
     - [ ] Use Django's Model Submodule?
     - [ ] Resolve TODO's
 - [ ] Teams Service
-    - [ ] Unit Test Teams Service
+    - [ ] Unit Tests
 - [ ] Games Service
-    - [ ] Implement CRUD Functionalities
 - [ ] Stats Service
 - [ ] Leagues Service
 
