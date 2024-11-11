@@ -1,5 +1,17 @@
 import datetime
+import json
+from typing import Optional
+from django.db import DatabaseError
+from django.http import JsonResponse
 from django.test import SimpleTestCase
+from src.views import (
+    create_player,
+    delete_player,
+    error_handler,
+    get_player,
+    parse_body,
+    update_player,
+)
 from src.models import (
     Player,
     PlayerNotFoundError,
@@ -10,6 +22,8 @@ from src.models import (
     validate_jersey_number,
 )
 from unittest.mock import MagicMock, call, patch
+
+# TODO: undo dependency injection for mocking connection cursors
 
 
 class PositionEnumTest(SimpleTestCase):
@@ -392,3 +406,179 @@ class PlayerModelTests(SimpleTestCase):
                 call("DELETE FROM players WHERE id = %s", [1]),
             ]
         )
+
+
+class TestHttpRequest:
+    def __init__(self, path: str, method: str, body: Optional[str]):
+        self.path = path
+        self.method = method
+        self.body = body
+
+
+@error_handler
+def error_handler_wrapper(exception=None):
+    if exception:
+        raise exception
+    return JsonResponse({"message": "success"}, status=200)
+
+
+class ViewsUtilsTests(SimpleTestCase):
+    def test_parse_body(self):
+        req = TestHttpRequest(
+            "v1/players",
+            "POST",
+            """
+            {
+                "name": "Michael Yi",
+                "jerseyNumber": "14",
+                "dob": "2004-12-14",
+                "height": "5' 10\\\"",
+                "weight": 140,
+                "position": "Shortstop",
+                "teamId": 1
+            }
+            """,
+        )
+
+        name, jersey_number, dob, height, weight, position, team_id = parse_body(req)
+
+        self.assertEqual(name, "Michael Yi")
+        self.assertEqual(jersey_number, "14")
+        self.assertEqual(dob, "2004-12-14")
+        self.assertEqual(height, "5' 10\"")
+        self.assertEqual(weight, 140)
+        self.assertEqual(position, Position.SS)
+        self.assertEqual(team_id, 1)
+
+    def test_handle_success(self):
+        res = error_handler_wrapper()
+        self.assertEqual(json.loads(res.content.decode())["message"], "success")
+        self.assertEqual(res.status_code, 200)
+
+    def test_handle_value_error(self):
+        res = error_handler_wrapper(ValueError("id must be positive"))
+        self.assertEqual(
+            json.loads(res.content.decode())["error"], "id must be positive"
+        )
+        self.assertEqual(res.status_code, 400)
+
+    def test_handle_key_error(self):
+        res = error_handler_wrapper(KeyError("id"))
+        self.assertEqual(json.loads(res.content.decode())["error"], "'id'")
+        self.assertEqual(res.status_code, 400)
+
+    def test_handle_player_not_found_error(self):
+        res = error_handler_wrapper(PlayerNotFoundError("player not found"))
+        self.assertEqual(json.loads(res.content.decode())["error"], "player not found")
+        self.assertEqual(res.status_code, 404)
+
+    def test_handle_any_error(self):
+        res = error_handler_wrapper(DatabaseError("Table `` not found"))
+        self.assertEqual(
+            json.loads(res.content.decode())["error"], "internal server error"
+        )
+        self.assertEqual(res.status_code, 500)
+
+
+class ViewsTest(SimpleTestCase):
+    @patch("src.models.Player.create")
+    def test_create(self, mock):
+        mock.return_value = 1
+        req = TestHttpRequest(
+            "v1/players",
+            "POST",
+            """
+            {
+                "name": "Michael Yi",
+                "jerseyNumber": "14",
+                "dob": "2004-12-14",
+                "height": "5' 10\\\"",
+                "weight": 140,
+                "position": "Shortstop",
+                "teamId": 1
+            }
+            """,
+        )
+
+        res = create_player(req)
+
+        mock.assert_called_once_with(
+            "Michael Yi", "14", "2004-12-14", "5' 10\"", 140, Position.SS, 1
+        )
+
+        self.assertEqual(json.loads(res.content.decode())["id"], 1)
+        self.assertEqual(res.status_code, 201)
+
+    # def test_player_view_to_get_player
+    # def test_player_view_to_update_player
+    # def test_player_view_to_delete_player
+
+    @patch("src.models.Player.get")
+    def test_get_player(self, mock):
+        mock.return_value = Player(
+            1,
+            "Michael Yi",
+            "14",
+            datetime.datetime(2024, 12, 14),
+            19,
+            "5' 10\"",
+            140,
+            Position.SS,
+            1,
+            datetime.datetime(2024, 12, 14),
+            datetime.datetime(2024, 12, 14),
+        )
+        req = TestHttpRequest("v1/players/1", "GET", None)
+
+        res = get_player(req, 1)
+        actual_player = json.loads(res.content.decode())["player"]
+
+        mock.assert_called_once_with(1)
+        self.assertEqual(actual_player["id"], 1)
+        self.assertEqual(actual_player["name"], "Michael Yi")
+        self.assertEqual(actual_player["jerseyNumber"], "#14")
+        self.assertEqual(actual_player["dob"], "2024-12-14 00:00:00")
+        self.assertEqual(actual_player["age"], 19)
+        self.assertEqual(actual_player["height"], "5' 10\"")
+        self.assertEqual(actual_player["weight"], 140)
+        self.assertEqual(actual_player["position"], "Shortstop")
+        self.assertEqual(actual_player["teamId"], 1)
+        self.assertEqual(actual_player["createdAt"], "2024-12-14 00:00:00")
+        self.assertEqual(actual_player["updatedAt"], "2024-12-14 00:00:00")
+        self.assertEqual(res.status_code, 200)
+
+    @patch("src.models.Player.update")
+    def test_update_player(self, mock):
+        mock.return_value = None
+        req = TestHttpRequest(
+            "v1/players/1",
+            "PATCH",
+            """
+            {
+                "name": "Michael Yi",
+                "jerseyNumber": "14",
+                "dob": "2004-12-14",
+                "height": "5' 10\\\"",
+                "weight": 140,
+                "position": "Shortstop",
+                "teamId": 1
+            }
+            """,
+        )
+
+        res = update_player(req, 1)
+
+        mock.assert_called_once_with(
+            1, "Michael Yi", "14", "2004-12-14", "5' 10\"", 140, Position.SS, 1
+        )
+        self.assertEqual(res.status_code, 204)
+
+    @patch("src.models.Player.delete")
+    def test_delete_player(self, mock):
+        mock.return_value = None
+        req = TestHttpRequest("v1/players/1", "DELETE", None)
+
+        res = delete_player(req, 1)
+
+        mock.assert_called_once_with(1)
+        self.assertEqual(res.status_code, 204)

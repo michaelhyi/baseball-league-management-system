@@ -37,9 +37,8 @@ def error_handler(func):
             return JsonResponse({"error": str(e)}, status=400)
         except PlayerNotFoundError as e:
             return JsonResponse({"error": str(e)}, status=404)
-        except DatabaseError as e:
-            logging.error("err:", str(e))
-            return JsonResponse({"error": "Internal server error"}, status=500)
+        except:
+            return JsonResponse({"error": "internal server error"}, status=500)
 
     return wrapper
 
@@ -47,7 +46,7 @@ def error_handler(func):
 @require_http_methods(["POST"])
 @error_handler
 def create_player(request):
-    logging.info("Create player request received")
+    logging.info("create player request received")
     name, jersey_number, dob, height, weight, position, team_id = parse_body(request)
 
     logging.info("Successfully parsed json body")
@@ -75,9 +74,9 @@ def get_player(request, id):
 
 @error_handler
 def update_player(request, id):
-    name, jersey_number, age, height, weight, position, team_id = parse_body(request)
+    name, jersey_number, dob, height, weight, position, team_id = parse_body(request)
 
-    Player.update(id, name, jersey_number, age, height, weight, position, team_id)
+    Player.update(id, name, jersey_number, dob, height, weight, position, team_id)
     return HttpResponse(status=204)
 
 
