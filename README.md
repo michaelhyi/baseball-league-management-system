@@ -85,6 +85,7 @@ curl -i -X DELETE http://localhost:8080/v1/players/<id>
 ```
 
 </details>
+<br/>
 </details>
 
 <details>
