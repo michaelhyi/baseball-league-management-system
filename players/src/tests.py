@@ -10,6 +10,7 @@ from src.views import (
     error_handler,
     get_player,
     parse_body,
+    player_view,
     update_player,
 )
 from src.models import (
@@ -509,9 +510,44 @@ class ViewsTest(SimpleTestCase):
         self.assertEqual(json.loads(res.content.decode())["id"], 1)
         self.assertEqual(res.status_code, 201)
 
-    # def test_player_view_to_get_player
-    # def test_player_view_to_update_player
-    # def test_player_view_to_delete_player
+    @patch("src.views.delete_player")
+    @patch("src.views.update_player")
+    @patch("src.views.get_player")
+    def test_player_view_to_get_player(self, mock_get, mock_update, mock_delete):
+        mock_get.return_value = None
+        req = TestHttpRequest("v1/players/1", "GET", None)
+
+        player_view(req, 1)
+
+        mock_get.assert_called_once_with(req, 1)
+        self.assertFalse(mock_update.called)
+        self.assertFalse(mock_delete.called)
+
+    @patch("src.views.delete_player")
+    @patch("src.views.update_player")
+    @patch("src.views.get_player")
+    def test_player_view_to_update_player(self, mock_get, mock_update, mock_delete):
+        mock_update.return_value = None
+        req = TestHttpRequest("v1/players/1", "PATCH", None)
+
+        player_view(req, 1)
+
+        mock_update.assert_called_once_with(req, 1)
+        self.assertFalse(mock_get.called)
+        self.assertFalse(mock_delete.called)
+
+    @patch("src.views.delete_player")
+    @patch("src.views.update_player")
+    @patch("src.views.get_player")
+    def test_player_view_to_delete_player(self, mock_get, mock_update, mock_delete):
+        mock_delete.return_value = None
+        req = TestHttpRequest("v1/players/1", "DELETE", None)
+
+        player_view(req, 1)
+
+        mock_delete.assert_called_once_with(req, 1)
+        self.assertFalse(mock_get.called)
+        self.assertFalse(mock_update.called)
 
     @patch("src.models.Player.get")
     def test_get_player(self, mock):
