@@ -32,6 +32,8 @@ This project follows a microservices-based architecture.
 <details>
     <summary>Players (Python/Django)</summary>
 
+##### Endpoints
+
 <details>
     <summary>Create Player</summary>
 
@@ -89,6 +91,8 @@ curl -i -X DELETE http://localhost:8080/v1/players/<id>
 
 <details>
     <summary>Teams (C#/.NET)</summary>
+
+##### Endpoints
 
 <details>
     <summary>Create Team</summary>
