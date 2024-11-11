@@ -24,12 +24,14 @@ This project will follow a microservices-based architecture.
 
 ### Requirements
 
-#### API Gateway (Go/HTTP)
+<details>
+    <summary>API Gateway (Go/HTTP/gRPC)</summary>
+</details>
 
 <details>
     <summary>Players (Python/Django)</summary>
 
-#### Requirements
+#### Endpoints
 <details>
     <summary>Create Player</summary>
 
@@ -91,7 +93,7 @@ curl -i -X DELETE http://localhost:8080/v1/players/<id>
 <details>
     <summary>Teams (C#/.NET)</summary>
 
-#### Requirements
+#### Endpoints
 
 <details>
     <summary>Create Team</summary>
@@ -178,4 +180,5 @@ curl -i -X DELETE http://localhost:8080/v1/teams/<id>
 - [ ] Games Service
 - [ ] Stats Service
 - [ ] Leagues Service
+- [ ] System Design
 
