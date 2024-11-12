@@ -12,8 +12,8 @@ It provides insights into player performance, league standings, and match result
 ### Tech Stack
 
 - Python/Django
-- C#/.NET
 - Go/HTTP/gRPC
+- C#/.NET
 - SQL
 - Swift/Kotlin
 - MySQL
