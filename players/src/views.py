@@ -1,6 +1,5 @@
 import json
 import logging
-from django.db import DatabaseError
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_http_methods
 
@@ -10,6 +9,7 @@ logging.basicConfig(level=logging.INFO)
 
 
 def parse_body(request) -> tuple[str, str, str, str, int, Position, int]:
+    logging.info(f"parsing json body: {request.body}")
     body = json.loads(request.body)
 
     name = body["name"]
@@ -34,10 +34,13 @@ def error_handler(func):
         try:
             return func(*args, **kwargs)
         except (ValueError, KeyError) as e:
+            logging.error(str(e))
             return JsonResponse({"error": str(e)}, status=400)
         except PlayerNotFoundError as e:
+            logging.error(str(e))
             return JsonResponse({"error": str(e)}, status=404)
-        except:
+        except Exception as e:
+            logging.error(str(e))
             return JsonResponse({"error": "internal server error"}, status=500)
 
     return wrapper
