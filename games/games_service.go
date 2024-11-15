@@ -51,7 +51,7 @@ func (s *server) GetGame(_ context.Context, in *pb.GameId) (*pb.GetGameResponse,
 		AwayTeamId:    game.AwayTeamID,
 		HomeTeamScore: game.HomeTeamScore,
 		AwayTeamScore: game.AwayTeamScore,
-		Date:          game.Date.Format("DD-MM-YYYY HH:mm:ss"),
+		Date:          game.Date.Format("2006-01-02 15:04:05"),
 		Location:      game.Location,
 	}, nil
 }

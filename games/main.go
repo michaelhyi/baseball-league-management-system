@@ -22,6 +22,7 @@ func getDb() *sql.DB {
 		Net:    "tcp",
 		Addr:   "127.0.0.1:3306",
 		DBName: "baseball_league_management_system",
+        Params: map[string]string{"parseTime": "true"},
 	}
 
 	db, err := sql.Open("mysql", cfg.FormatDSN())

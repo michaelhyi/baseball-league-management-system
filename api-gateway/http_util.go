@@ -15,6 +15,7 @@ func GetRequest(r *http.Request, downstreamUrl string) (*http.Request, error) {
 		req, err = http.NewRequest(r.Method, downstreamUrl+r.URL.String(), nil)
 	} else {
 		body, err := io.ReadAll(r.Body)
+		defer r.Body.Close()
 		if err != nil {
 			return nil, err
 		}

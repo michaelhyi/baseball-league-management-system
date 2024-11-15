@@ -68,6 +68,6 @@ func validateUpdateGameRequest(in *pb.UpdateGameRequest) (time.Time, error) {
 }
 
 func parseStringToTime(s string) (time.Time, error) {
-	format := "DD-MM-YYYY HH:mm:ss"
+	format := "2006-01-02 15:04:05"
 	return time.Parse(format, s)
 }

@@ -70,9 +70,9 @@ func (d *Dao) GetGame(id int32) (Game, error) {
 	row := d.db.QueryRow("SELECT * FROM games WHERE id = ? LIMIT 1", id)
 
 	if err := row.Scan(
-		&game.Id,
-		&game.HomeTeamId,
-		&game.AwayTeamId,
+		&game.ID,
+		&game.HomeTeamID,
+		&game.AwayTeamID,
 		&game.HomeTeamScore,
 		&game.HomeTeamScore,
 		&game.Date,

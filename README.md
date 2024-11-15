@@ -145,12 +145,66 @@ curl -i -X DELETE http://localhost:8080/v1/teams/<id>
 </details>
 </details>
 
+<details>
+    <summary>Games (Go + gRPC)</summary>
+
+##### Endpoints
+
+<details>
+    <summary>Create Game</summary>
+
+```bash
+curl -i -X POST http://localhost:8080/v1/games \
+    -H 'Content-Type: application/json' \
+    -d '{
+        "homeTeamId": 1,
+        "awayTeamId": 2,
+        "homeTeamScore": 5,
+        "awayTeamScore": 0,
+        "date": "2004-12-14 12:00:00",
+        "location": "Irvine, CA"
+}'
+```
+</details>
+
+<details>
+    <summary>Get Game</summary>
+
+```bash
+curl -i http://localhost:8080/v1/games/<id>
+```
+</details>
+
+<details>
+    <summary>Update Game</summary>
+
+```bash
+curl -i -X PATCH http://localhost:8080/v1/games/<id> \
+    -H 'Content-Type: application/json' \
+    -d '{
+        "homeTeamId": 1,
+        "awayTeamId": 2,
+        "homeTeamScore": 5,
+        "awayTeamScore": 0,
+        "date": "2004-12-14 12:00:00",
+        "location": "Irvine, CA"
+}'
+```
+</details>
+
+<details>
+    <summary>Delete Game</summary>
+
+```bash
+curl -i -X DELETE http://localhost:8080/v1/games/<id>
+```
+</details>
+
+</details>
+
 
 #### Games (Go + gRPC)
-- [ ] `POST /v1/games`
-- [ ] `GET /v1/games/{id}`
 - [ ] `PATCH /v1/games/{id}`
-- [ ] `DELETE /v1/games/{id}`
 
 #### Stats (Python/Django)
 - [ ] `POST /v1/stats`
