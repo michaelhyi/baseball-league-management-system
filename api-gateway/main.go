@@ -13,8 +13,8 @@ import (
 
 func main() {
 	httpClient := &http.Client{}
-	playersController := &rest.HttpController{HttpClient: httpClient, DownstreamUrl: "http://localhost:8081"}
-	teamsController := &rest.HttpController{HttpClient: httpClient, DownstreamUrl: "http://localhost:8082"}
+	playersController := &rest.RestController{HttpClient: httpClient, DownstreamUrl: "http://localhost:8081"}
+	teamsController := &rest.RestController{HttpClient: httpClient, DownstreamUrl: "http://localhost:8082"}
 
 	gamesGrpcConn, err := grpc.NewClient("localhost:8083", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {

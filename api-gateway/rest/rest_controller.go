@@ -5,12 +5,12 @@ import (
 	"net/http"
 )
 
-type HttpController struct {
+type RestController struct {
 	HttpClient    *http.Client
 	DownstreamUrl string
 }
 
-func (c *HttpController) Handler(w http.ResponseWriter, r *http.Request) {
+func (c *RestController) Handler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("%s %s\n", r.Method, r.URL.Path)
 	req, err := GetRequest(r, c.DownstreamUrl)
 	if err != nil {
