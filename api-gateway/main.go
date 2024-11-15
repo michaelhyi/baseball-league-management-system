@@ -6,6 +6,8 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 	"log"
 	"net/http"
+
+	"github.com/michaelhyi/baseball-league-management-system/api-gateway/games"
 )
 
 func main() {
@@ -19,7 +21,7 @@ func main() {
 	}
 	defer gamesGrpcConn.Close()
 	gamesGrpcClient := pb.NewGamesServiceClient(gamesGrpcConn)
-	gamesController := &GamesController{GamesServiceClient: gamesGrpcClient}
+	gamesController := &games.GamesController{GamesServiceClient: gamesGrpcClient}
 
 	http.HandleFunc("/v1/players", playersController.Handler)
 	http.HandleFunc("/v1/players/", playersController.Handler)
