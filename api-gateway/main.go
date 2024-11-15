@@ -19,7 +19,6 @@ func main() {
 	}
 	defer gamesGrpcConn.Close()
 	gamesGrpcClient := pb.NewGamesServiceClient(gamesGrpcConn)
-
 	gamesController := &GamesController{GamesServiceClient: gamesGrpcClient}
 
 	http.HandleFunc("/v1/players", playersController.Handler)
