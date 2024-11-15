@@ -216,7 +216,7 @@ curl -i -X DELETE http://localhost:8080/v1/games/<id>
 
 ### Backlog
 - [ ] API Gateway
-    - [ ] Refactor gRPC Controllers
+    - [ ] gRPC Error Handling
     - [ ] Unit Tests
     - [ ] JWT Auth, Rate Limiting, Logging, Monitoring, Data Validation, Tracing, Pagination, Caching
 - [ ] Players Service

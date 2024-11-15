@@ -4,7 +4,6 @@ import (
 	"context"
 	"log"
 	"net/http"
-	"strconv"
 	"strings"
 	"time"
 
@@ -62,14 +61,12 @@ func (c *GamesController) handleCreateGame(w http.ResponseWriter, r *http.Reques
 }
 
 func (c *GamesController) handleGetGame(w http.ResponseWriter, r *http.Request, ctx context.Context) {
-	id, err := rest.GetPathVariableAsInt(r, "/v1/games/")
+	id, err := rest.GetPathVariableAsInt(w, r, "/v1/games/")
 	if err != nil {
-		log.Printf("error parsing game id: %v", err)
-		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	req := &pb.GameId{Id: int32(id)}
+	req := &pb.GameId{Id: id}
 	resp, err := c.GamesServiceClient.GetGame(ctx, req)
 	if err != nil {
 		log.Printf("error sending get game request: %v", err)
@@ -83,16 +80,14 @@ func (c *GamesController) handleGetGame(w http.ResponseWriter, r *http.Request, 
 }
 
 func (c *GamesController) handleUpdateGame(w http.ResponseWriter, r *http.Request, ctx context.Context) {
-	id, err := rest.GetPathVariableAsInt(r, "/v1/games/")
+	id, err := rest.GetPathVariableAsInt(w, r, "/v1/games/")
 	if err != nil {
-		log.Printf("error parsing game id: %v", err)
-		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
 	req := &pb.UpdateGameRequest{}
 	rest.ConvertHttpRequestBodyToObject(w, r, req)
-	req.Id = int32(id)
+	req.Id = id
 
 	_, err = c.GamesServiceClient.UpdateGame(ctx, req)
 	if err != nil {
@@ -106,14 +101,13 @@ func (c *GamesController) handleUpdateGame(w http.ResponseWriter, r *http.Reques
 }
 
 func (c *GamesController) handleDeleteGame(w http.ResponseWriter, r *http.Request, ctx context.Context) {
-	id, err := rest.GetPathVariableAsInt(r, "/v1/games/")
+	id, err := rest.GetPathVariableAsInt(w, r, "/v1/games/")
 	if err != nil {
-		log.Printf("error parsing game id: %v", err)
-		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	_, err = c.GamesServiceClient.DeleteGame(ctx, &pb.GameId{Id: int32(id)})
+	req := &pb.GameId{Id: id}
+	_, err = c.GamesServiceClient.DeleteGame(ctx, req)
 	if err != nil {
 		log.Printf("error sending delete game request: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)

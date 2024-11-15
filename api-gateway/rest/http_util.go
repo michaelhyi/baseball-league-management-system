@@ -55,8 +55,16 @@ func GetPathVariable(r *http.Request, prefix string) string {
 	return strings.TrimPrefix(r.URL.Path, prefix)
 }
 
-func GetPathVariableAsInt(r *http.Request, prefix string) (int, error) {
-	return strconv.Atoi(GetPathVariable(r, prefix))
+func GetPathVariableAsInt(w http.ResponseWriter, r *http.Request, prefix string) (int32, error) {
+	pathVariable, err := strconv.Atoi(GetPathVariable(r, prefix))
+
+	if err != nil {
+		log.Printf("error parsing path variable: %v", err)
+		w.WriteHeader(http.StatusBadRequest)
+		return 0, err
+	}
+
+	return int32(pathVariable), nil
 }
 
 func ConvertHttpRequestBodyToObject(w http.ResponseWriter, r *http.Request, obj any) {
