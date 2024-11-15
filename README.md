@@ -202,10 +202,6 @@ curl -i -X DELETE http://localhost:8080/v1/games/<id>
 
 </details>
 
-
-#### Games (Go + gRPC)
-- [ ] `PATCH /v1/games/{id}`
-
 #### Stats (Python/Django)
 - [ ] `POST /v1/stats`
 - [ ] `GET /v1/stats/{id}`
@@ -220,6 +216,7 @@ curl -i -X DELETE http://localhost:8080/v1/games/<id>
 
 ### Backlog
 - [ ] API Gateway
+    - [ ] Refactor gRPC Controllers
     - [ ] Unit Tests
     - [ ] JWT Auth, Rate Limiting, Logging, Monitoring, Data Validation, Tracing, Pagination, Caching
 - [ ] Players Service
@@ -228,6 +225,7 @@ curl -i -X DELETE http://localhost:8080/v1/games/<id>
 - [ ] Teams Service
     - [ ] Unit Tests
 - [ ] Games Service
+    - [ ] Unit Tests
 - [ ] Stats Service
 - [ ] Leagues Service
 - [ ] System Design
