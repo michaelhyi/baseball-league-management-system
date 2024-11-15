@@ -8,12 +8,13 @@ import (
 	"net/http"
 
 	"github.com/michaelhyi/baseball-league-management-system/api-gateway/games"
+	"github.com/michaelhyi/baseball-league-management-system/api-gateway/rest"
 )
 
 func main() {
 	httpClient := &http.Client{}
-	playersController := &HttpController{HttpClient: httpClient, DownstreamUrl: "http://localhost:8081"}
-	teamsController := &HttpController{HttpClient: httpClient, DownstreamUrl: "http://localhost:8082"}
+	playersController := &rest.HttpController{HttpClient: httpClient, DownstreamUrl: "http://localhost:8081"}
+	teamsController := &rest.HttpController{HttpClient: httpClient, DownstreamUrl: "http://localhost:8082"}
 
 	gamesGrpcConn, err := grpc.NewClient("localhost:8083", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
