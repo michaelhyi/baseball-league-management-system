@@ -203,17 +203,57 @@ curl -i -X DELETE http://localhost:8080/v1/games/<id>
 
 </details>
 
+<details>
+    <summary>Leagues (C#/.NET/gRPC)</summary>
+
+##### Endpoints
+
+<details>
+    <summary>Create League</summary>
+
+```bash
+curl -i -X POST http://localhost:8080/v1/leagues \
+    -H 'Content-Type: application/json' \
+    -d '{
+        "name": "Athletic Coast Conference"
+}'
+```
+</details>
+
+<details>
+    <summary>Get League</summary>
+
+```bash
+curl -i http://localhost:8080/v1/leagues/<id>
+```
+</details>
+
+<details>
+    <summary>Update League</summary>
+
+```bash
+curl -i -X PATCH http://localhost:8080/v1/leagues/<id> \
+    -H 'Content-Type: application/json' \
+    -d '{
+        "name": "Athletic Coast Conference"
+}'
+```
+</details>
+
+<details>
+    <summary>Delete League</summary>
+
+```bash
+curl -i -X DELETE http://localhost:8080/v1/leagues/<id>
+```
+</details>
+</details>
+
 #### Stats (Python/Django)
 - [ ] `POST /v1/stats`
 - [ ] `GET /v1/stats/{id}`
 - [ ] `PATCH /v1/stats/{id}`
 - [ ] `DELETE /v1/stats/{id}`
-
-#### Leagues (C#/.NET)
-- [ ] `POST /v1/leagues`
-- [ ] `GET /v1/leagues/{id}`
-- [ ] `PATCH /v1/leagues/{id}`
-- [ ] `DELETE /v1/leagues/{id}`
 
 ### Backlog
 - [ ] API Gateway
