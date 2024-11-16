@@ -2,7 +2,7 @@ syntax = "proto3";
 
 option csharp_namespace = "Leagues.GrpcModels";
 
-package leagues;
+package proto;
 
 import "google/protobuf/empty.proto";
 

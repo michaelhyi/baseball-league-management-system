@@ -1,5 +1,6 @@
 using Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Models;
 
 namespace Daos;
@@ -18,15 +19,31 @@ public class LeaguesDao : ILeaguesDao
     public async Task<int> CreateLeagueAsync(string name)
     {
         _logger.LogInformation("dao received request to create league {name}", name);
-        int id = await _dbCtx.Leagues
-                .FromSqlRaw(@"START TRANSACTION;
-                            INSERT INTO leagues (name) VALUES (@p0);
-                            SELECT LAST_INSERT_ID() as id;
-                            COMMIT;", name)
-                .Select(t => t.Id).FirstOrDefaultAsync();
+        IDbContextTransaction transaction = await _dbCtx.Database.BeginTransactionAsync();
 
-        _logger.LogInformation("inserted team with id {id}", id);
-        return id;
+        try
+        {
+            await _dbCtx.Database.ExecuteSqlRawAsync
+            (
+                "INSERT INTO leagues (name) VALUES (@p0)",
+                name
+            );
+            int id = await _dbCtx.Leagues.FromSqlRaw("SELECT LAST_INSERT_ID() as id").Select(l => l.Id).FirstOrDefaultAsync();
+            await transaction.CommitAsync();
+            _logger.LogInformation("inserted team with id {id}", id);
+
+            return id;
+        }
+        catch
+        {
+            _logger.LogError("error inserting league");
+            await transaction.RollbackAsync();
+            throw;
+        }
+        finally
+        {
+            await transaction.DisposeAsync();
+        }
     }
 
     public async Task<League?> GetLeagueAsync(int id)
@@ -42,7 +59,7 @@ public class LeaguesDao : ILeaguesDao
         _logger.LogInformation("dao received request to update league with id {id} to name {name}", id, name);
         await _dbCtx.Database.ExecuteSqlRawAsync
         (
-            "UPDATE leagues SET name = @p0 WHERE id = @p2",
+            "UPDATE leagues SET name = @p0 WHERE id = @p1",
             name,
             id
         );

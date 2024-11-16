@@ -147,7 +147,7 @@ curl -i -X DELETE http://localhost:8080/v1/teams/<id>
 </details>
 
 <details>
-    <summary>Games (Go + gRPC)</summary>
+    <summary>Games (Go/gRPC)</summary>
 
 ##### Endpoints
 
@@ -257,7 +257,6 @@ curl -i -X DELETE http://localhost:8080/v1/leagues/<id>
 
 ### Backlog
 - [ ] API Gateway
-    - [ ] Setup gRPC Connection to Leagues Service
     - [ ] gRPC Error Handling
     - [ ] Unit Tests
     - [ ] JWT Auth, Rate Limiting, Logging, Monitoring, Data Validation, Pagination, Caching
