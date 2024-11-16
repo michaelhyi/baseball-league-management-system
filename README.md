@@ -12,12 +12,13 @@ It provides insights into player performance, league standings, and match result
 ### Tech Stack
 
 - Python/Django
-- Go/HTTP/gRPC
+- Go
 - C#/.NET
 - SQL
-- Swift/Kotlin
+- gRPC
 - MySQL
 - Redis
+- Swift/Kotlin
 
 This project follows a microservices-based architecture.
 
@@ -216,9 +217,10 @@ curl -i -X DELETE http://localhost:8080/v1/games/<id>
 
 ### Backlog
 - [ ] API Gateway
+    - [ ] Setup gRPC Connection to Leagues Service
     - [ ] gRPC Error Handling
     - [ ] Unit Tests
-    - [ ] JWT Auth, Rate Limiting, Logging, Monitoring, Data Validation, Tracing, Pagination, Caching
+    - [ ] JWT Auth, Rate Limiting, Logging, Monitoring, Data Validation, Pagination, Caching
 - [ ] Players Service
     - [ ] Use Django's Model Submodule?
     - [ ] Resolve TODO's
@@ -228,5 +230,8 @@ curl -i -X DELETE http://localhost:8080/v1/games/<id>
     - [ ] Unit Tests
 - [ ] Stats Service
 - [ ] Leagues Service
+    - [ ] Unit Tests
+- [ ] Setup Complex Queries
+- [ ] Distributed MySQL Databases? Sharding / Replication
 - [ ] System Design
 
