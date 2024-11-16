@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+option go_package = "github.com/michaelhyi/baseball-league-management-system/games/proto";
+
+package proto;
+
+import "google/protobuf/empty.proto";
+
+service LeaguesService {
+  rpc CreateLeague (CreateLeagueRequest) returns (LeagueId);
+  rpc GetLeague (LeagueId) returns (GetLeagueResponse);
+  rpc UpdateLeague (UpdateLeagueRequest) returns (google.protobuf.Empty);
+  rpc DeleteLeague (LeagueId) returns (google.protobuf.Empty);
+}
+
+message CreateLeagueRequest {
+    string name = 1;
+}
+
+message LeagueId {
+    int32 id = 1;
+}
+
+message GetLeagueResponse {
+    int32 id = 1;
+    string name = 2;
+}
+
+message UpdateLeagueRequest {
+    int32 id = 1;
+    string name = 2;
+}
