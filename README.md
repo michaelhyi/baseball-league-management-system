@@ -267,8 +267,13 @@ curl -i -X DELETE http://localhost:8080/v1/leagues/<id>
     - [ ] Unit Tests
 - [ ] Games Service
     - [ ] Unit Tests
-- [ ] Stats Service
 - [ ] Leagues Service
+    - [ ] Unit Tests
+- [ ] Stats Service
+    - [ ] Setup SQL Schema
+    - [ ] Update Docs with CURL Requests
+    - [ ] Setup Django App
+    - [ ] Basic CRUD for Stats
     - [ ] Unit Tests
 - [ ] Setup Complex Queries
 - [ ] Distributed MySQL Databases? Sharding / Replication
