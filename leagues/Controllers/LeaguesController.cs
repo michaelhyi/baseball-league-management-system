@@ -6,7 +6,7 @@ using Services;
 
 namespace leagues.Controllers;
 
-public class LeaguesController : Leagues.GrpcModels.Leagues.LeaguesBase
+public class LeaguesController : Leagues.GrpcModels.LeaguesService.LeaguesServiceBase
 {
     private readonly ILogger<LeaguesController> _logger;
     private readonly ILeaguesService _service;

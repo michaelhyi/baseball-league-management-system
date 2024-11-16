@@ -6,7 +6,7 @@ package leagues;
 
 import "google/protobuf/empty.proto";
 
-service Leagues {
+service LeaguesService {
   rpc CreateLeague (CreateLeagueRequest) returns (LeagueId);
   rpc GetLeague (LeagueId) returns (GetLeagueResponse);
   rpc UpdateLeague (UpdateLeagueRequest) returns (google.protobuf.Empty);
