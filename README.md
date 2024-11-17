@@ -27,7 +27,7 @@ This project follows a microservices-based architecture.
 ### Requirements
 
 <details>
-    <summary>API Gateway (Go/HTTP/gRPC)</summary>
+    <summary>API Gateway (Go/gRPC)</summary>
 </details>
 
 <details>
