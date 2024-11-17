@@ -249,11 +249,137 @@ curl -i -X DELETE http://localhost:8080/v1/leagues/<id>
 </details>
 </details>
 
-#### Stats (Python/Django)
-- [ ] `POST /v1/stats`
-- [ ] `GET /v1/stats/{id}`
-- [ ] `PATCH /v1/stats/{id}`
-- [ ] `DELETE /v1/stats/{id}`
+<details>
+    <summary>Stats (Python/Django)</summary>
+
+##### Endpoints
+<details>
+    <summary>Create Batting Stats</summary>
+
+```bash
+curl -i -X POST http://localhost:8080/v1/stats/batting \
+    -H 'Content-Type: application/json' \
+    -d '{
+        "playerId": 1,
+        "atBats": 4,
+        "runs": 1,
+        "hits": 2,
+        "totalBases": 3,
+        "doubles": 1,
+        "triples": 0,
+        "homeRuns": 0,
+        "rbi": 1,
+        "walks": 1,
+        "strikeouts": 1,
+        "stolenBases": 1,
+        "hitByPitches": 0,
+        "sacFlies": 0
+    }'
+```
+</details>
+
+<details>
+    <summary>Create Pitching Stats</summary>
+
+```bash
+curl -i -X POST http://localhost:8080/v1/stats/pitching \
+    -H 'Content-Type: application/json' \
+    -d '{
+        "playerId": 1,
+        "wins": 1,
+        "losses": 0,
+        "earnedRuns": 1,
+        "games": 1,
+        "gamesStarted": 1,
+        "saves": 0,
+        "inningsPitched": 7,
+        "strikeouts": 10,
+        "walks": 2,
+        "hits": 5
+    }'
+```
+</details>
+
+<details>
+    <summary>Get Batting Stats</summary>
+
+```bash
+curl -i http://localhost:8080/v1/stats/batting/<player-id>
+```
+</details>
+
+<details>
+    <summary>Get Pitching Stats</summary>
+
+```bash
+curl -i http://localhost:8080/v1/stats/pitching/<player-id>
+```
+</details>
+
+<details>
+    <summary>Update Batting Stats</summary>
+
+```bash
+curl -i -X PATCH http://localhost:8080/v1/stats/batting/<id> \
+    -H 'Content-Type: application/json' \
+    -d '{
+        "playerId": 1,
+        "atBats": 4,
+        "runs": 1,
+        "hits": 2,
+        "totalBases": 3,
+        "doubles": 1,
+        "triples": 0,
+        "homeRuns": 0,
+        "rbi": 1,
+        "walks": 1,
+        "strikeouts": 1,
+        "stolenBases": 1,
+        "hitByPitches": 0,
+        "sacFlies": 0
+    }'
+```
+</details>
+
+<details>
+    <summary>Update Pitching Stats</summary>
+
+```bash
+curl -i -X PATCH http://localhost:8080/v1/stats/pitching/<id> \
+    -H 'Content-Type: application/json' \
+    -d '{
+        "playerId": 1,
+        "wins": 1,
+        "losses": 0,
+        "earnedRuns": 1,
+        "games": 1,
+        "gamesStarted": 1,
+        "saves": 0,
+        "inningsPitched": 7,
+        "strikeouts": 10,
+        "walks": 2,
+        "hits": 5
+    }'
+```
+</details>
+
+<details>
+    <summary>Delete Batting Stats</summary>
+
+```bash
+curl -i -X DELETE http://localhost:8080/v1/stats/batting/<id>
+```
+</details>
+
+<details>
+    <summary>Delete Pitching Stats</summary>
+
+```bash
+curl -i -X DELETE http://localhost:8080/v1/stats/pitching/<id>
+```
+</details>
+
+</details>
 
 ### Backlog
 - [ ] API Gateway
@@ -270,7 +396,6 @@ curl -i -X DELETE http://localhost:8080/v1/leagues/<id>
 - [ ] Leagues Service
     - [ ] Unit Tests
 - [ ] Stats Service
-    - [ ] Update Docs with CURL Requests
     - [ ] Setup Django App
     - [ ] Basic CRUD for Stats
     - [ ] Unit Tests
