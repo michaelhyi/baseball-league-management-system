@@ -396,7 +396,6 @@ curl -i -X DELETE http://localhost:8080/v1/stats/pitching/<id>
 - [ ] Leagues Service
     - [ ] Unit Tests
 - [ ] Stats Service
-    - [ ] Setup Django App
     - [ ] Basic CRUD for Stats
     - [ ] Unit Tests
 - [ ] Setup Complex Queries
