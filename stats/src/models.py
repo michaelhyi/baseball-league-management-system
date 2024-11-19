@@ -36,12 +36,12 @@ class BattingStats:
         stolen_bases: int,
         hit_by_pitch: int,
         sacrifice_flies: int,
+        created_at: datetime,
+        updated_at: datetime,
         batting_average: float,
         on_base_percentage: float,
         slugging_percentage: float,
         on_base_plus_slugging: float,
-        created_at: datetime,
-        updated_at: datetime,
     ):
         self.id = id
         self.player_id = player_id
@@ -58,12 +58,12 @@ class BattingStats:
         self.stolen_bases = stolen_bases
         self.hit_by_pitch = hit_by_pitch
         self.sacrifice_flies = sacrifice_flies
+        self.created_at = created_at
+        self.updated_at = updated_at
         self.batting_average = batting_average
         self.on_base_percentage = on_base_percentage
         self.slugging_percentage = slugging_percentage
         self.on_base_plus_slugging = on_base_plus_slugging
-        self.created_at = created_at
-        self.updated_at = updated_at
 
     @staticmethod
     def create(
@@ -254,10 +254,10 @@ class PitchingStats:
         strikeouts: int,
         walks: int,
         hits: int,
-        earned_run_average: float,
-        walks_and_hits_per_inning_pitched: float,
         created_at: datetime,
         updated_at: datetime,
+        earned_run_average: float,
+        walks_and_hits_per_inning_pitched: float,
     ):
         self.id = id
         self.player_id = player_id
@@ -271,10 +271,10 @@ class PitchingStats:
         self.strikeouts = strikeouts
         self.walks = walks
         self.hits = hits
-        self.earned_run_average = earned_run_average
-        self.walks_and_hits_per_inning_pitched = walks_and_hits_per_inning_pitched
         self.created_at = created_at
         self.updated_at = updated_at
+        self.earned_run_average = earned_run_average
+        self.walks_and_hits_per_inning_pitched = walks_and_hits_per_inning_pitched
 
     @staticmethod
     def create(
