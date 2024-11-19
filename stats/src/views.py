@@ -177,71 +177,87 @@ def create_pitching_stats_view(request):
 def batting_stats_view(request, player_id):
     logger.info(f"handling request for batting stats with player id: {player_id}")
     if request.method == "GET":
-        stats = BattingStats.get(player_id)
-        return JsonResponse(
-            {
-                "battingStats": {
-                    "id": stats.id,
-                    "playerId": stats.player_id,
-                    "atBats": stats.at_bats,
-                    "runs": stats.runs,
-                    "hits": stats.hits,
-                    "totalBases": stats.total_bases,
-                    "doubles": stats.doubles,
-                    "triples": stats.triples,
-                    "homeRuns": stats.home_runs,
-                    "rbi": stats.runs_batted_in,
-                    "walks": stats.walks,
-                    "strikeouts": stats.strikeouts,
-                    "stolenBases": stats.stolen_bases,
-                    "hitByPitches": stats.hit_by_pitch,
-                    "sacrificeFlies": stats.sacrifice_flies,
-                    "createdAt": stats.created_at,
-                    "updatedAt": stats.updated_at,
-                    "battingAverage": stats.batting_average,
-                    "onBasePercentage": stats.on_base_percentage,
-                    "sluggingPercentage": stats.slugging_percentage,
-                    "ops": stats.on_base_plus_slugging,
-                }
-            },
-            status=200,
-        )
-    elif request.method == "PATCH":
-        (
-            player_id,
-            at_bats,
-            runs,
-            hits,
-            total_bases,
-            doubles,
-            triples,
-            home_runs,
-            rbi,
-            walks,
-            strikeouts,
-            stolen_bases,
-            hit_by_pitches,
-            sac_flies,
-        ) = parse_batting_stats(request)
+        get_batting_stats(request, player_id)
 
-        BattingStats.update(
-            player_id,
-            at_bats,
-            runs,
-            hits,
-            total_bases,
-            doubles,
-            triples,
-            home_runs,
-            rbi,
-            walks,
-            strikeouts,
-            stolen_bases,
-            hit_by_pitches,
-            sac_flies,
-        )
-        return JsonResponse({}, status=204)
+    elif request.method == "PATCH":
+        update_batting_stats(request, player_id)
+
     elif request.method == "DELETE":
+        delete_batting_stats(request, player_id)
+
+
+def get_batting_stats(request, player_id):
+    stats = BattingStats.get(player_id)
+    return JsonResponse(
+        {
+            "battingStats": {
+                "id": stats.id,
+                "playerId": stats.player_id,
+                "atBats": stats.at_bats,
+                "runs": stats.runs,
+                "hits": stats.hits,
+                "totalBases": stats.total_bases,
+                "doubles": stats.doubles,
+                "triples": stats.triples,
+                "homeRuns": stats.home_runs,
+                "rbi": stats.runs_batted_in,
+                "walks": stats.walks,
+                "strikeouts": stats.strikeouts,
+                "stolenBases": stats.stolen_bases,
+                "hitByPitches": stats.hit_by_pitch,
+                "sacrificeFlies": stats.sacrifice_flies,
+                "createdAt": stats.created_at,
+                "updatedAt": stats.updated_at,
+                "battingAverage": stats.batting_average,
+                "onBasePercentage": stats.on_base_percentage,
+                "sluggingPercentage": stats.slugging_percentage,
+                "ops": stats.on_base_plus_slugging,
+            }
+        },
+        status=200,
+    )
+
+
+def update_batting_stats(request, player_id):
+    (
+        player_id,
+        at_bats,
+        runs,
+        hits,
+        total_bases,
+        doubles,
+        triples,
+        home_runs,
+        rbi,
+        walks,
+        strikeouts,
+        stolen_bases,
+        hit_by_pitches,
+        sac_flies,
+    ) = parse_batting_stats(request)
+
+    BattingStats.update(
+        player_id,
+        at_bats,
+        runs,
+        hits,
+        total_bases,
+        doubles,
+        triples,
+        home_runs,
+        rbi,
+        walks,
+        strikeouts,
+        stolen_bases,
+        hit_by_pitches,
+        sac_flies,
+    )
+    return JsonResponse({}, status=204)
+
+
+def delete_batting_stats(request, player_id):
+    logger.info(f"handling request for batting stats with player id: {player_id}")
+    if request.method == "DELETE":
         BattingStats.delete(player_id)
         return JsonResponse({}, status=204)
 
@@ -251,59 +267,75 @@ def batting_stats_view(request, player_id):
 def pitching_stats_view(request, player_id):
     logger.info(f"handling request for pitching stats with player id: {player_id}")
     if request.method == "GET":
-        stats = PitchingStats.get(player_id)
-        return JsonResponse(
-            {
-                "pitchingStats": {
-                    "id": stats.id,
-                    "playerId": stats.player_id,
-                    "wins": stats.wins,
-                    "losses": stats.losses,
-                    "earnedRuns": stats.earned_runs,
-                    "games": stats.games,
-                    "gamesStarted": stats.games_started,
-                    "saves": stats.saves,
-                    "inningsPitched": stats.innings_pitched,
-                    "strikeouts": stats.strikeouts,
-                    "walks": stats.walks,
-                    "hits": stats.hits,
-                    "createdAt": stats.created_at,
-                    "updatedAt": stats.updated_at,
-                    "earnedRunAverage": stats.earned_run_average,
-                    "whip": stats.walks_and_hits_per_inning_pitched,
-                }
-            },
-            status=200,
-        )
-    elif request.method == "PATCH":
-        (
-            player_id,
-            wins,
-            losses,
-            earned_runs,
-            games,
-            games_started,
-            saves,
-            innings_pitched,
-            strikeouts,
-            walks,
-            hits,
-        ) = parse_pitching_stats(request)
+        get_pitching_stats(request, player_id)
 
-        PitchingStats.update(
-            player_id,
-            wins,
-            losses,
-            earned_runs,
-            games,
-            games_started,
-            saves,
-            innings_pitched,
-            strikeouts,
-            walks,
-            hits,
-        )
-        return JsonResponse({}, status=204)
+    elif request.method == "PATCH":
+        update_pitching_stats(request, player_id)
+
     elif request.method == "DELETE":
+        delete_pitching_stats(request, player_id)
+
+
+def get_pitching_stats(request, player_id):
+    stats = PitchingStats.get(player_id)
+    return JsonResponse(
+        {
+            "pitchingStats": {
+                "id": stats.id,
+                "playerId": stats.player_id,
+                "wins": stats.wins,
+                "losses": stats.losses,
+                "earnedRuns": stats.earned_runs,
+                "games": stats.games,
+                "gamesStarted": stats.games_started,
+                "saves": stats.saves,
+                "inningsPitched": stats.innings_pitched,
+                "strikeouts": stats.strikeouts,
+                "walks": stats.walks,
+                "hits": stats.hits,
+                "createdAt": stats.created_at,
+                "updatedAt": stats.updated_at,
+                "earnedRunAverage": stats.earned_run_average,
+                "whip": stats.walks_and_hits_per_inning_pitched,
+            }
+        },
+        status=200,
+    )
+
+
+def update_pitching_stats(request, player_id):
+    (
+        player_id,
+        wins,
+        losses,
+        earned_runs,
+        games,
+        games_started,
+        saves,
+        innings_pitched,
+        strikeouts,
+        walks,
+        hits,
+    ) = parse_pitching_stats(request)
+
+    PitchingStats.update(
+        player_id,
+        wins,
+        losses,
+        earned_runs,
+        games,
+        games_started,
+        saves,
+        innings_pitched,
+        strikeouts,
+        walks,
+        hits,
+    )
+    return JsonResponse({}, status=204)
+
+
+def delete_pitching_stats(request, player_id):
+    logger.info(f"handling request for pitching stats with player id: {player_id}")
+    if request.method == "DELETE":
         PitchingStats.delete(player_id)
         return JsonResponse({}, status=204)
