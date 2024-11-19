@@ -261,19 +261,19 @@ curl -i -X POST http://localhost:8080/v1/stats/batting \
     -H 'Content-Type: application/json' \
     -d '{
         "playerId": 1,
-        "atBats": 4,
-        "runs": 1,
-        "hits": 2,
-        "totalBases": 3,
-        "doubles": 1,
-        "triples": 0,
-        "homeRuns": 0,
-        "rbi": 1,
-        "walks": 1,
-        "strikeouts": 1,
-        "stolenBases": 1,
-        "hitByPitches": 0,
-        "sacFlies": 0
+        "atBats": 3119,
+        "runs": 562,
+        "hits": 878,
+        "totalBases": 1792,
+        "doubles": 167,
+        "triples": 36,
+        "homeRuns": 225,
+        "rbi": 567,
+        "walks": 432,
+        "strikeouts": 917,
+        "stolenBases": 145,
+        "hitByPitches": 22,
+        "sacFlies": 18 
     }'
 ```
 </details>
@@ -286,16 +286,16 @@ curl -i -X POST http://localhost:8080/v1/stats/pitching \
     -H 'Content-Type: application/json' \
     -d '{
         "playerId": 1,
-        "wins": 1,
-        "losses": 0,
-        "earnedRuns": 1,
-        "games": 1,
-        "gamesStarted": 1,
+        "wins": 38,
+        "losses": 19,
+        "earnedRuns": 161,
+        "games": 86,
+        "gamesStarted": 86,
         "saves": 0,
-        "inningsPitched": 7,
-        "strikeouts": 10,
-        "walks": 2,
-        "hits": 5
+        "inningsPitched": 481.2,
+        "strikeouts": 608,
+        "walks": 173,
+        "hits": 348 
     }'
 ```
 </details>
@@ -324,19 +324,19 @@ curl -i -X PATCH http://localhost:8080/v1/stats/batting/<player-id> \
     -H 'Content-Type: application/json' \
     -d '{
         "playerId": 1,
-        "atBats": 4,
-        "runs": 1,
-        "hits": 2,
-        "totalBases": 3,
-        "doubles": 1,
-        "triples": 0,
-        "homeRuns": 0,
-        "rbi": 1,
-        "walks": 1,
-        "strikeouts": 1,
-        "stolenBases": 1,
-        "hitByPitches": 0,
-        "sacFlies": 0
+        "atBats": 3119,
+        "runs": 562,
+        "hits": 878,
+        "totalBases": 1792,
+        "doubles": 167,
+        "triples": 36,
+        "homeRuns": 225,
+        "rbi": 567,
+        "walks": 432,
+        "strikeouts": 917,
+        "stolenBases": 145,
+        "hitByPitches": 22,
+        "sacFlies": 18 
     }'
 ```
 </details>
@@ -349,16 +349,16 @@ curl -i -X PATCH http://localhost:8080/v1/stats/pitching/<player-id> \
     -H 'Content-Type: application/json' \
     -d '{
         "playerId": 1,
-        "wins": 1,
-        "losses": 0,
-        "earnedRuns": 1,
-        "games": 1,
-        "gamesStarted": 1,
+        "wins": 38,
+        "losses": 19,
+        "earnedRuns": 161,
+        "games": 86,
+        "gamesStarted": 86,
         "saves": 0,
-        "inningsPitched": 7.2,
-        "strikeouts": 10,
-        "walks": 2,
-        "hits": 5
+        "inningsPitched": 481.2,
+        "strikeouts": 608,
+        "walks": 173,
+        "hits": 348 
     }'
 ```
 </details>
