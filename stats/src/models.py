@@ -12,6 +12,7 @@ def validate_args_are_zero_or_pos(*args):
         if arg < 0:
             raise ValueError(f"argument {arg} cannot be negative")
 
+
 class StatsNotFoundError(Exception):
     pass
 
@@ -39,7 +40,7 @@ class BattingStats:
         slugging_percentage: float,
         on_base_plus_slugging: float,
         created_at: datetime,
-        updated_at: datetime
+        updated_at: datetime,
     ):
         self.id = id
         self.player_id = player_id
@@ -148,14 +149,16 @@ class BattingStats:
             ROUND(total_bases / at_bats, 3) AS slugging_percentage
             FROM batting_stats WHERE player_id = %s
         ) AS subquery;
-        """;
+        """
 
         with connection.cursor() as cursor:
             cursor.execute(sql, [id])
             row = cursor.fetchone()
 
             if not row:
-                raise StatsNotFoundError(f"batting stats for player id {player_id} not found")
+                raise StatsNotFoundError(
+                    f"batting stats for player id {player_id} not found"
+                )
             logger.info(f"found batting stats for player id {player_id}")
             return BattingStats(*row)
 
@@ -234,6 +237,7 @@ class BattingStats:
             cursor.execute(sql, [player_id])
             logger.info(f"deleted BattingStats with player_id {player_id}")
 
+
 class PitchingStats:
     def __init__(
         self,
@@ -252,7 +256,7 @@ class PitchingStats:
         earned_run_average: float,
         walks_and_hits_per_inning_pitched: float,
         created_at: datetime,
-        updated_at: datetime
+        updated_at: datetime,
     ):
         self.id = id
         self.player_id = player_id
