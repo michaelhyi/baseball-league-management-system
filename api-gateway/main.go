@@ -34,6 +34,8 @@ func main() {
 	leaguesGrpcClient := pb.NewLeaguesServiceClient(leaguesGrpcConn)
 	leaguesController := &leagues.LeaguesController{LeaguesServiceClient: leaguesGrpcClient}
 
+	statsController := &rest.RestController{HttpClient: httpClient, DownstreamUrl: "http://localhost:8085"}
+
 	http.HandleFunc("/v1/players", playersController.Handler)
 	http.HandleFunc("/v1/players/", playersController.Handler)
 	http.HandleFunc("/v1/teams", teamsController.Handler)
@@ -42,6 +44,8 @@ func main() {
 	http.HandleFunc("/v1/games/", gamesController.Handler)
 	http.HandleFunc("/v1/leagues", leaguesController.Handler)
 	http.HandleFunc("/v1/leagues/", leaguesController.Handler)
+	http.HandleFunc("/v1/stats", statsController.Handler)
+	http.HandleFunc("/v1/stats/", statsController.Handler)
 
 	log.Printf("Server listening on port 8080")
 	err = http.ListenAndServe(":8080", nil)

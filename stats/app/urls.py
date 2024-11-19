@@ -17,7 +17,7 @@ Including another URLconf
 # from django.contrib import admin
 from django.urls import path
 
-from stats.src import views
+from src import views
 
 urlpatterns = [
     path('v1/stats/batting', views.create_batting_stats_view),

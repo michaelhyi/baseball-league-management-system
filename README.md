@@ -320,7 +320,7 @@ curl -i http://localhost:8080/v1/stats/pitching/<player-id>
     <summary>Update Batting Stats</summary>
 
 ```bash
-curl -i -X PATCH http://localhost:8080/v1/stats/batting/<id> \
+curl -i -X PATCH http://localhost:8080/v1/stats/batting/<player-id> \
     -H 'Content-Type: application/json' \
     -d '{
         "playerId": 1,
@@ -345,7 +345,7 @@ curl -i -X PATCH http://localhost:8080/v1/stats/batting/<id> \
     <summary>Update Pitching Stats</summary>
 
 ```bash
-curl -i -X PATCH http://localhost:8080/v1/stats/pitching/<id> \
+curl -i -X PATCH http://localhost:8080/v1/stats/pitching/<player-id> \
     -H 'Content-Type: application/json' \
     -d '{
         "playerId": 1,
@@ -355,7 +355,7 @@ curl -i -X PATCH http://localhost:8080/v1/stats/pitching/<id> \
         "games": 1,
         "gamesStarted": 1,
         "saves": 0,
-        "inningsPitched": 7,
+        "inningsPitched": 7.2,
         "strikeouts": 10,
         "walks": 2,
         "hits": 5
@@ -367,7 +367,7 @@ curl -i -X PATCH http://localhost:8080/v1/stats/pitching/<id> \
     <summary>Delete Batting Stats</summary>
 
 ```bash
-curl -i -X DELETE http://localhost:8080/v1/stats/batting/<id>
+curl -i -X DELETE http://localhost:8080/v1/stats/batting/<player-id>
 ```
 </details>
 
@@ -375,7 +375,7 @@ curl -i -X DELETE http://localhost:8080/v1/stats/batting/<id>
     <summary>Delete Pitching Stats</summary>
 
 ```bash
-curl -i -X DELETE http://localhost:8080/v1/stats/pitching/<id>
+curl -i -X DELETE http://localhost:8080/v1/stats/pitching/<player-id>
 ```
 </details>
 
