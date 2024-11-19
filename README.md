@@ -387,7 +387,6 @@ curl -i -X DELETE http://localhost:8080/v1/stats/pitching/<player-id>
     - [ ] Unit Tests
     - [ ] JWT Auth, Rate Limiting, Logging, Monitoring, Data Validation, Pagination, Caching
 - [ ] Players Service
-    - [ ] Use Django's Model Submodule?
     - [ ] Resolve TODO's
 - [ ] Teams Service
     - [ ] Unit Tests
@@ -396,7 +395,6 @@ curl -i -X DELETE http://localhost:8080/v1/stats/pitching/<player-id>
 - [ ] Leagues Service
     - [ ] Unit Tests
 - [ ] Stats Service
-    - [ ] Basic CRUD for Stats
     - [ ] Unit Tests
 - [ ] Setup Complex Queries
 - [ ] Distributed MySQL Databases? Sharding / Replication

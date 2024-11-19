@@ -2,8 +2,8 @@ import logging
 from datetime import datetime
 from django.db import connection
 
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
 
 
 def validate_args_are_zero_or_pos(*args):
@@ -153,14 +153,15 @@ class BattingStats:
         """
 
         with connection.cursor() as cursor:
-            cursor.execute(sql, [id])
+            cursor.execute(sql, [player_id])
             row = cursor.fetchone()
+            logger.info(f"row: {row}")
 
             if not row:
                 raise StatsNotFoundError(
                     f"batting stats for player id {player_id} not found"
                 )
-            logger.info(f"found batting stats for player id {player_id}")
+            logger.info(f"found batting stats for player id {player_id}: {row}")
             return BattingStats(*row)
 
     @staticmethod
@@ -344,8 +345,8 @@ class PitchingStats:
 
         sql = """
         SELECT *,
-        ROUND(earned_runs / innings_pitched * 9, 3) AS earned_run_average, 
-        ROUND((walks + hits) / innings_pitched), 3) AS walks_and_hits_per_innings_pitched
+        ROUND(earned_runs / innings_pitched * 9, 2) AS earned_run_average, 
+        ROUND((walks + hits) / innings_pitched, 2) AS walks_and_hits_per_innings_pitched
         FROM pitching_stats
         WHERE player_id = %s;
         """

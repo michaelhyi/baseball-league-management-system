@@ -5,8 +5,8 @@ from django.http import JsonResponse
 from src.models import BattingStats, PitchingStats, StatsNotFoundError
 from django.views.decorators.http import require_http_methods
 
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
 
 
 def parse_batting_stats(
@@ -177,17 +177,18 @@ def create_pitching_stats_view(request):
 def batting_stats_view(request, player_id):
     logger.info(f"handling request for batting stats with player id: {player_id}")
     if request.method == "GET":
-        get_batting_stats(request, player_id)
+        return get_batting_stats(request, player_id)
 
-    elif request.method == "PATCH":
-        update_batting_stats(request, player_id)
+    if request.method == "PATCH":
+        return update_batting_stats(request, player_id)
 
-    elif request.method == "DELETE":
-        delete_batting_stats(request, player_id)
+    return delete_batting_stats(request, player_id)
 
 
 def get_batting_stats(request, player_id):
+    logger.info(f"getting batting stats with player id: {player_id}")
     stats = BattingStats.get(player_id)
+    logger.info(f"got batting stats: {stats}")
     return JsonResponse(
         {
             "battingStats": {
@@ -267,13 +268,12 @@ def delete_batting_stats(request, player_id):
 def pitching_stats_view(request, player_id):
     logger.info(f"handling request for pitching stats with player id: {player_id}")
     if request.method == "GET":
-        get_pitching_stats(request, player_id)
+        return get_pitching_stats(request, player_id)
 
-    elif request.method == "PATCH":
-        update_pitching_stats(request, player_id)
+    if request.method == "PATCH":
+        return update_pitching_stats(request, player_id)
 
-    elif request.method == "DELETE":
-        delete_pitching_stats(request, player_id)
+    return delete_pitching_stats(request, player_id)
 
 
 def get_pitching_stats(request, player_id):
