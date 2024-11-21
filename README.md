@@ -14,11 +14,9 @@ It provides insights into player performance, league standings, and match result
 - Python/Django
 - Go
 - C#/.NET
-- SQL
 - gRPC
+- SQL
 - MySQL
-- Redis
-- Swift/Kotlin
 
 This project follows a microservices-based architecture.
 
@@ -384,8 +382,9 @@ curl -i -X DELETE http://localhost:8080/v1/stats/pitching/<player-id>
 ### Backlog
 - [ ] API Gateway
     - [ ] gRPC Error Handling
+    - [ ] Rate Limiting, Logging, Monitoring, Data Validation, Pagination
+    - [ ] Interservice Comms
     - [ ] Unit Tests
-    - [ ] JWT Auth, Rate Limiting, Logging, Monitoring, Data Validation, Pagination, Caching
 - [ ] Players Service
     - [ ] Resolve TODO's
 - [ ] Teams Service
@@ -397,6 +396,9 @@ curl -i -X DELETE http://localhost:8080/v1/stats/pitching/<player-id>
 - [ ] Stats Service
     - [ ] Unit Tests
 - [ ] Setup Complex Queries
+    - [ ] League Standings
+    - [ ] Team Stats (Record, Batting, Pitching)
+    - [ ] Team/League Leaders
 - [ ] Distributed MySQL Databases? Sharding / Replication
 - [ ] System Design
 
