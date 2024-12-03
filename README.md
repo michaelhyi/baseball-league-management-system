@@ -396,7 +396,6 @@ curl -i -X DELETE http://localhost:8080/v1/stats/pitching/<player-id>
 - [ ] Stats Service
     - [ ] Unit Tests
 - [ ] Setup Complex Queries
-    - [ ] League Standings
     - [ ] Team Stats (Record, Batting, Pitching)
     - [ ] Team/League Leaders
 - [ ] Distributed MySQL Databases? Sharding / Replication
