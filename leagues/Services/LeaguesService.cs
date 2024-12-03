@@ -14,10 +14,12 @@ public class LeaguesService : ILeaguesService
         _dao = dao;
     }
 
-    public async Task<int> CreateLeague(string name) {
+    public async Task<int> CreateLeague(string name)
+    {
         _logger.LogInformation("service received request to create league with name {name}", name);
 
-        if (name == null || name.Length == 0) {
+        if (name == null || name.Length == 0)
+        {
             throw new ArgumentException("name cannot be null or empty");
         }
 
@@ -26,31 +28,65 @@ public class LeaguesService : ILeaguesService
         return id;
     }
 
-    public async Task<League> GetLeague(int id) {
+    public async Task<League> GetLeague(int id)
+    {
         _logger.LogInformation("service received request to get league with id {id}", id);
 
-        if (id <= 0) {
+        if (id <= 0)
+        {
             throw new ArgumentException("id cannot be negative or zero");
         }
 
         League? league = await _dao.GetLeagueAsync(id);
         _logger.LogInformation("service retrieved league with league {league}", league);
 
-        if (league == null) {
+        if (league == null)
+        {
             throw new KeyNotFoundException($"league with id {id} not found");
         }
 
         return league;
     }
 
-    public async Task UpdateLeague(int id, string name) {
-        _logger.LogInformation("service received request to update league with id {id} and name {name}", id, name);
+    public async Task<LeagueStandings> GetLeagueStandings(int id)
+    {
+        _logger.LogInformation("service received request to get league standings with id {id}", id);
 
-        if (id <= 0) {
+        if (id <= 0)
+        {
             throw new ArgumentException("id cannot be negative or zero");
         }
 
-        if (name == null || name.Length == 0) {
+        League? league = await _dao.GetLeagueAsync(id);
+        if (league == null)
+        {
+            throw new KeyNotFoundException($"league with id {id} not found");
+        }
+
+        IEnumerable<TeamStandings> standings = await _dao.GetTeamStandingsAsync(league.Id);
+        _logger.LogInformation("service retrieved league standings with standings {standings}", standings);
+
+        LeagueStandings leagueStandings = new LeagueStandings
+        (
+            league.Id,
+            league.Name,
+            standings
+        );
+
+        return leagueStandings;
+    }
+
+    public async Task UpdateLeague(int id, string name)
+    {
+        _logger.LogInformation("service received request to update league with id {id} and name {name}", id, name);
+
+        if (id <= 0)
+        {
+            throw new ArgumentException("id cannot be negative or zero");
+        }
+
+        if (name == null || name.Length == 0)
+        {
             throw new ArgumentException("name cannot be null or empty");
         }
 
@@ -58,10 +94,12 @@ public class LeaguesService : ILeaguesService
         _logger.LogInformation("service updated league with id {id} and name {name}", id, name);
     }
 
-    public async Task DeleteLeague(int id) {
+    public async Task DeleteLeague(int id)
+    {
         _logger.LogInformation("service received request to delete league with id {id}", id);
 
-        if (id <= 0) {
+        if (id <= 0)
+        {
             throw new ArgumentException("id cannot be negative or zero");
         }
 

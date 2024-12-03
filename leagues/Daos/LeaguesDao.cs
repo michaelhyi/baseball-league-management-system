@@ -54,6 +54,88 @@ public class LeaguesDao : ILeaguesDao
             .FirstOrDefaultAsync();
     }
 
+    public async Task<IEnumerable<TeamStandings>> GetTeamStandingsAsync(int leagueId)
+    {
+        _logger.LogInformation("dao received request to get team standings with leagueId {leagueId}", leagueId);
+        return await _dbCtx.TeamStandings
+            .FromSqlRaw(
+                @"
+                WITH team_standings_sub AS (
+                    SELECT teams.id, teams.name, SUM(
+                        CASE
+                            WHEN games.home_team_id=teams.id AND games.home_team_score > games.away_team_score THEN 1
+                            WHEN games.away_team_id=teams.id AND games.away_team_score > games.home_team_score THEN 1
+                            ELSE 0
+                        END
+                    ) AS wins,
+                    SUM(
+                        CASE
+                            WHEN games.home_team_id=teams.id AND games.home_team_score < games.away_team_score THEN 1
+                            WHEN games.away_team_id=teams.id AND games.away_team_score < games.home_team_score THEN 1
+                            ELSE 0
+                        END
+                    ) AS losses,
+                    SUM(
+                        CASE
+                            WHEN games.home_team_id=teams.id THEN games.home_team_score
+                            ELSE games.away_team_score
+                        END
+                    ) AS runs_scored, 
+                    SUM(
+                        CASE
+                            WHEN games.home_team_id=teams.id THEN games.away_team_score
+                            ELSE games.home_team_score
+                        END
+                    ) AS runs_allowed,
+                    CONCAT(
+                        SUM(
+                            CASE
+                                WHEN games.home_team_id=teams.id AND games.home_team_score > games.away_team_score THEN 1
+                                ELSE 0
+                            END
+                        ),
+                        '-',
+                        SUM(
+                            CASE
+                                WHEN games.home_team_id=teams.id AND games.home_team_score < games.away_team_score THEN 1
+                                ELSE 0
+                            END
+                        )
+                    ) AS home_record,
+                    CONCAT(
+                        SUM(
+                            CASE
+                                WHEN games.away_team_id=teams.id AND games.home_team_score < games.away_team_score THEN 1
+                                ELSE 0
+                            END
+                        ),
+                        '-',
+                        SUM(
+                            CASE
+                                WHEN games.away_team_id=teams.id AND games.home_team_score > games.away_team_score THEN 1
+                                ELSE 0
+                            END
+                        )
+                    ) AS away_record
+                    FROM teams
+                    LEFT JOIN games ON games.home_team_id=teams.id OR games.away_team_id=teams.id
+                    WHERE league_id = @p0
+                    GROUP BY teams.id, teams.name
+                )
+
+                SELECT *,
+                (
+                    CASE
+                        WHEN wins + losses = 0 THEN 0.000
+                        ELSE ROUND(wins / (wins + losses), 3)
+                    END
+                ) AS winning_percentage,
+                runs_scored - runs_allowed AS run_differential
+                FROM team_standings_sub;",
+                leagueId
+            ).ToListAsync();
+    }
+
     public async Task UpdateLeagueAsync(int id, string name)
     {
         _logger.LogInformation("dao received request to update league with id {id} to name {name}", id, name);

@@ -20,10 +20,11 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	LeaguesService_CreateLeague_FullMethodName = "/proto.LeaguesService/CreateLeague"
-	LeaguesService_GetLeague_FullMethodName    = "/proto.LeaguesService/GetLeague"
-	LeaguesService_UpdateLeague_FullMethodName = "/proto.LeaguesService/UpdateLeague"
-	LeaguesService_DeleteLeague_FullMethodName = "/proto.LeaguesService/DeleteLeague"
+	LeaguesService_CreateLeague_FullMethodName       = "/proto.LeaguesService/CreateLeague"
+	LeaguesService_GetLeague_FullMethodName          = "/proto.LeaguesService/GetLeague"
+	LeaguesService_GetLeagueStandings_FullMethodName = "/proto.LeaguesService/GetLeagueStandings"
+	LeaguesService_UpdateLeague_FullMethodName       = "/proto.LeaguesService/UpdateLeague"
+	LeaguesService_DeleteLeague_FullMethodName       = "/proto.LeaguesService/DeleteLeague"
 )
 
 // LeaguesServiceClient is the client API for LeaguesService service.
@@ -32,6 +33,7 @@ const (
 type LeaguesServiceClient interface {
 	CreateLeague(ctx context.Context, in *CreateLeagueRequest, opts ...grpc.CallOption) (*LeagueId, error)
 	GetLeague(ctx context.Context, in *LeagueId, opts ...grpc.CallOption) (*GetLeagueResponse, error)
+	GetLeagueStandings(ctx context.Context, in *LeagueId, opts ...grpc.CallOption) (*GetLeagueStandingsResponse, error)
 	UpdateLeague(ctx context.Context, in *UpdateLeagueRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	DeleteLeague(ctx context.Context, in *LeagueId, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
@@ -64,6 +66,16 @@ func (c *leaguesServiceClient) GetLeague(ctx context.Context, in *LeagueId, opts
 	return out, nil
 }
 
+func (c *leaguesServiceClient) GetLeagueStandings(ctx context.Context, in *LeagueId, opts ...grpc.CallOption) (*GetLeagueStandingsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetLeagueStandingsResponse)
+	err := c.cc.Invoke(ctx, LeaguesService_GetLeagueStandings_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *leaguesServiceClient) UpdateLeague(ctx context.Context, in *UpdateLeagueRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(emptypb.Empty)
@@ -90,6 +102,7 @@ func (c *leaguesServiceClient) DeleteLeague(ctx context.Context, in *LeagueId, o
 type LeaguesServiceServer interface {
 	CreateLeague(context.Context, *CreateLeagueRequest) (*LeagueId, error)
 	GetLeague(context.Context, *LeagueId) (*GetLeagueResponse, error)
+	GetLeagueStandings(context.Context, *LeagueId) (*GetLeagueStandingsResponse, error)
 	UpdateLeague(context.Context, *UpdateLeagueRequest) (*emptypb.Empty, error)
 	DeleteLeague(context.Context, *LeagueId) (*emptypb.Empty, error)
 	mustEmbedUnimplementedLeaguesServiceServer()
@@ -107,6 +120,9 @@ func (UnimplementedLeaguesServiceServer) CreateLeague(context.Context, *CreateLe
 }
 func (UnimplementedLeaguesServiceServer) GetLeague(context.Context, *LeagueId) (*GetLeagueResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetLeague not implemented")
+}
+func (UnimplementedLeaguesServiceServer) GetLeagueStandings(context.Context, *LeagueId) (*GetLeagueStandingsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetLeagueStandings not implemented")
 }
 func (UnimplementedLeaguesServiceServer) UpdateLeague(context.Context, *UpdateLeagueRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateLeague not implemented")
@@ -171,6 +187,24 @@ func _LeaguesService_GetLeague_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _LeaguesService_GetLeagueStandings_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LeagueId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LeaguesServiceServer).GetLeagueStandings(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: LeaguesService_GetLeagueStandings_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LeaguesServiceServer).GetLeagueStandings(ctx, req.(*LeagueId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _LeaguesService_UpdateLeague_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateLeagueRequest)
 	if err := dec(in); err != nil {
@@ -221,6 +255,10 @@ var LeaguesService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetLeague",
 			Handler:    _LeaguesService_GetLeague_Handler,
+		},
+		{
+			MethodName: "GetLeagueStandings",
+			Handler:    _LeaguesService_GetLeagueStandings_Handler,
 		},
 		{
 			MethodName: "UpdateLeague",

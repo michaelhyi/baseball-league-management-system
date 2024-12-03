@@ -8,6 +8,9 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+
+	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/proto"
 )
 
 func GetRequest(r *http.Request, downstreamUrl string) (*http.Request, error) {
@@ -82,8 +85,9 @@ func ConvertHttpRequestBodyToObject(w http.ResponseWriter, r *http.Request, obj 
 	}
 }
 
-func ConvertObjectToHttpResponse(w http.ResponseWriter, resp any) {
-	b, err := json.Marshal(resp)
+func ConvertObjectToHttpResponse(w http.ResponseWriter, resp proto.Message) {
+	m := protojson.MarshalOptions{EmitUnpopulated: true}
+	b, err := m.Marshal(resp)
 	if err != nil {
 		log.Printf("error converting grpc res to json: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)

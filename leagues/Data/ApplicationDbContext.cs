@@ -11,4 +11,5 @@ public class ApplicationDbContext : DbContext
     }
 
     public DbSet<League> Leagues { get; set; }
+    public DbSet<TeamStandings> TeamStandings { get; set; }
 }

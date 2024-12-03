@@ -68,6 +68,58 @@ public class LeaguesController : Leagues.GrpcModels.LeaguesService.LeaguesServic
         }
     }
 
+    public override async Task<GetLeagueStandingsResponse> GetLeagueStandings(
+        LeagueId req, ServerCallContext context)
+    {
+        _logger.LogInformation("controller received request to get standings for league with id {leagueId}", req.Id);
+        try
+        {
+            LeagueStandings leagueStandings = await _service.GetLeagueStandings(req.Id);
+            _logger.LogInformation("controller retrieved standings for league with id {leagueId}", req.Id);
+            GetLeagueStandingsResponse res = new GetLeagueStandingsResponse
+            {
+                Id = leagueStandings.Id,
+                Name = leagueStandings.Name,
+            };
+
+            foreach (Models.TeamStandings team in leagueStandings.Standings)
+            {
+                res.Standings.Add(
+                    new Leagues.GrpcModels.TeamStandings
+                    {
+                        Id = team.Id,
+                        Name = team.Name,
+                        Wins = team.Wins,
+                        Losses = team.Losses,
+                        WinningPercentage = team.WinningPercentage,
+                        RunsScored = team.RunsScored,
+                        RunsAllowed = team.RunsAllowed,
+                        RunDifferential = team.RunDifferential,
+                        HomeRecord = team.HomeRecord,
+                        AwayRecord = team.AwayRecord
+                    }
+                );
+            }
+
+            return res;
+        }
+        catch (ArgumentException ex)
+        {
+            _logger.LogError("error finding standings for league with id {leagueId}: {message}", req.Id, ex.Message);
+            throw new RpcException(new Status(StatusCode.InvalidArgument, ex.Message));
+        }
+        catch (KeyNotFoundException ex)
+        {
+            _logger.LogError("error finding standings for league with id {leagueId}: {message}", req.Id, ex.Message);
+            throw new RpcException(new Status(StatusCode.NotFound, ex.Message));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("error finding standings for league with id {leagueId}: {message}", req.Id, ex.Message);
+            throw new RpcException(new Status(StatusCode.Unknown, ex.Message));
+        }
+    }
+
     public override async Task<Empty> UpdateLeague(UpdateLeagueRequest req, ServerCallContext context)
     {
         _logger.LogInformation("controller received update request for league with id {leagueId} and name {name}", req.Id, req.Name);

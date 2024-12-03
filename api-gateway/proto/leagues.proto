@@ -7,26 +7,42 @@ package proto;
 import "google/protobuf/empty.proto";
 
 service LeaguesService {
-  rpc CreateLeague (CreateLeagueRequest) returns (LeagueId);
-  rpc GetLeague (LeagueId) returns (GetLeagueResponse);
-  rpc UpdateLeague (UpdateLeagueRequest) returns (google.protobuf.Empty);
-  rpc DeleteLeague (LeagueId) returns (google.protobuf.Empty);
+  rpc CreateLeague(CreateLeagueRequest) returns (LeagueId);
+  rpc GetLeague(LeagueId) returns (GetLeagueResponse);
+  rpc GetLeagueStandings(LeagueId) returns (GetLeagueStandingsResponse);
+  rpc UpdateLeague(UpdateLeagueRequest) returns (google.protobuf.Empty);
+  rpc DeleteLeague(LeagueId) returns (google.protobuf.Empty);
 }
 
-message CreateLeagueRequest {
-    string name = 1;
-}
+message CreateLeagueRequest { string name = 1; }
 
-message LeagueId {
-    int32 id = 1;
-}
+message LeagueId { int32 id = 1; }
 
 message GetLeagueResponse {
-    int32 id = 1;
-    string name = 2;
+  int32 id = 1;
+  string name = 2;
+}
+
+message GetLeagueStandingsResponse {
+  int32 id = 1;
+  string name = 2;
+  repeated TeamStandings standings = 3;
+}
+
+message TeamStandings {
+  int32 id = 1;
+  string name = 2;
+  uint32 wins = 3;
+  uint32 losses = 4;
+  float winning_percentage = 5;
+  int32 runs_scored = 6;
+  int32 runs_allowed = 7;
+  int32 run_differential = 8;
+  string home_record = 9;
+  string away_record = 10;
 }
 
 message UpdateLeagueRequest {
-    int32 id = 1;
-    string name = 2;
+  int32 id = 1;
+  string name = 2;
 }

@@ -25,8 +25,13 @@ func (c *LeaguesController) Handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if r.Method == http.MethodGet && strings.HasPrefix(r.URL.Path, "/v1/leagues/") {
+	if r.Method == http.MethodGet && !strings.HasPrefix(r.URL.Path, "/v1/leagues/standings/") && strings.HasPrefix(r.URL.Path, "/v1/leagues/") {
 		c.handleGetLeague(w, r, ctx)
+		return
+	}
+
+	if r.Method == http.MethodGet && strings.HasPrefix(r.URL.Path, "/v1/leagues/standings/") {
+		c.handleGetLeagueStandings(w, r, ctx)
 		return
 	}
 
@@ -69,7 +74,26 @@ func (c *LeaguesController) handleGetLeague(w http.ResponseWriter, r *http.Reque
 	req := &pb.LeagueId{Id: id}
 	resp, err := c.LeaguesServiceClient.GetLeague(ctx, req)
 	if err != nil {
-		log.Printf("error sending get game request: %v", err)
+		log.Printf("error sending get league request: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	rest.ConvertObjectToHttpResponse(w, resp)
+	w.WriteHeader(http.StatusOK)
+	return
+}
+
+func (c *LeaguesController) handleGetLeagueStandings(w http.ResponseWriter, r *http.Request, ctx context.Context) {
+	id, err := rest.GetPathVariableAsInt(w, r, "/v1/leagues/standings/")
+	if err != nil {
+		return
+	}
+
+	req := &pb.LeagueId{Id: id}
+	resp, err := c.LeaguesServiceClient.GetLeagueStandings(ctx, req)
+	if err != nil {
+		log.Printf("error sending get league standings request: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -91,7 +115,7 @@ func (c *LeaguesController) handleUpdateLeague(w http.ResponseWriter, r *http.Re
 
 	_, err = c.LeaguesServiceClient.UpdateLeague(ctx, req)
 	if err != nil {
-		log.Printf("error sending update game request: %v", err)
+		log.Printf("error sending update league request: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -109,7 +133,7 @@ func (c *LeaguesController) handleDeleteLeague(w http.ResponseWriter, r *http.Re
 	req := &pb.LeagueId{Id: id}
 	_, err = c.LeaguesServiceClient.DeleteLeague(ctx, req)
 	if err != nil {
-		log.Printf("error sending delete game request: %v", err)
+		log.Printf("error sending delete league request: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
